@@ -69,7 +69,7 @@ class APICaller {
 
     try{
       this.clientAccessKey = File.getContent(FILE_SYNCING_CONSTANTS.CLIENT_ACCESS_KEY_FILE)
-      ///this.clientAccessKey = File.getContent(FILE_SYNCING_CONSTANTS.CLIENT_ACCESS_KEY_QA_FILE)
+      //this.clientAccessKey = File.getContent(FILE_SYNCING_CONSTANTS.CLIENT_ACCESS_KEY_QA_FILE)
       this.apiUrl = `${FILE_SYNCING_CONSTANTS.API.URL_BASE}${this.clientAccessKey}`
       this.result = this.CallAPI(this.apiUrl, this.json)
     }
