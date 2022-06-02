@@ -9,7 +9,19 @@ async function handleSubmit(event) {
   let date = new Date()
   event.preventDefault();
   //^^//console.log("Inside Job Archiving handleSubmit()...")
+  let currentId = uuidv4()
+  let jobArchiver2 = new JobArchiver({sourceBucket:'vxtprod', externalJobNumber:'9000001',
 
+  year: this.state.year,
+  month: this.state.month,
+  assignedUserEmail: 'jmartinez@veritext.com',
+  contactName: 'Jose',
+  contactEmail: 'jmartinez@veritext.com',
+  contactPhone:'00',
+  id: currentId});
+  jobArchiver2.getS3FileList('vxtprod','9000001')
+  
+  return
   let storeState = window.store.getState()
 
   //^^//console.log(storeState)
@@ -17,13 +29,13 @@ async function handleSubmit(event) {
   let errorPresent = this.ValidateJobArchivingFields();
 
   try {
-    if(errorPresent === false) {
+    if(false === false) {
 
       // ARCHIVE JOB
       //TODO: Implement
       if(defined(storeState.user)){
         storeState.user.resetLastTimeOfActivity()
-        let currentId = uuidv4()
+       
 
         let jobArchiver = new JobArchiver({
           sourceBucket: this.state.sourceBucket,
@@ -40,7 +52,7 @@ async function handleSubmit(event) {
         this.props.AddArchivedJob({
           id: currentId,
           jobNumber: this.state.jobNumber,
-          jobArchiver: jobArchiver,
+          jobArchiver: jobArchiver2,
           date: date
         })
         

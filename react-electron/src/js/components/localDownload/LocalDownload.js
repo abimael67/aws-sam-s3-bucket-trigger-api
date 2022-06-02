@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Form, Col } from 'react-bootstrap'
 import fieldBind from './localDownload.fields/localDownload.fields'
 import { mapDispatchToProps, logicConstructor } from './localDownload.logic/LocalDownload.logic'
 import SectionTitle from './../../utils/sectionTitle'
+import getS3FileList from '../../classes/localDownloader/getS3FileList'
 
 class ConnectedLocalDownload extends Component {
   constructor(props) {
@@ -11,6 +12,14 @@ class ConnectedLocalDownload extends Component {
     logicConstructor.bind(this)(props)
     fieldBind.bind(this)()
   }
+
+  
+  componentDidMount(){
+    console.log('teststst')
+    getS3FileList('vxtarc', )
+  }
+
+
 
   render() {
     return (

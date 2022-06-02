@@ -10,7 +10,7 @@ const path = require("path");
 const isDev = require("electron-is-dev");
 let mainWindow;
 
-let allowDevTools = false;
+let allowDevTools = true;
 if(isDev) {
   allowDevTools = true;
 }
@@ -45,6 +45,7 @@ async function createWindow() {
   if(!allowDevTools) {
     //mainWindow.webContents.on("devtools-opened", () => { mainWindow.webContents.closeDevTools(); });
   }
+  mainWindow.webContents.openDevTools()
 
   const hideSplashscreen = initSplashScreen({
     mainWindow,

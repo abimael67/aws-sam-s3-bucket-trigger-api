@@ -19,6 +19,7 @@ try {
 catch(error) {
   Logging.logError("Error trying to initialize jobArchiver's config. Error:", error)
 }
+console.log('CONFIGG: ', config)
 
 function getParentFolder(fileKey) {
   if(fileKey[fileKey.length - 1] === "/") {
@@ -192,7 +193,7 @@ class JobArchiver {
 
       let files = this.removeNonFiles(response.Contents)
       let folders = this.getFolders(response.Contents)
-
+      console.log('Folders: ', folders)
       return { files, folders }
     }
     catch(error) {
@@ -242,7 +243,7 @@ class JobArchiver {
               cb()
               file.copyData = copyData
 
-              deleteS3File(sourceBucket, file, region, accessKeyId, secretAccessKey, signatureVersion)
+            //  deleteS3File(sourceBucket, file, region, accessKeyId, secretAccessKey, signatureVersion)
             }
           })
         })
@@ -348,7 +349,7 @@ class JobArchiver {
     try{
       // GET LIST OF FILES TO BE MOVED
       let { files, folders } = await this.getS3FileList(sourceBucket, externalJobNumber)
-
+        
       //MOVE FILES
       await this.moveS3Files(
         sourceBucket,
