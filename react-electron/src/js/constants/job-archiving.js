@@ -20,14 +20,14 @@ const sourceToTargetBucketMappings = {
 
 
 
-function getDestinationParentDirectory(sourceBucket, year, month) {
+function getDestinationParentDirectory(sourceBucket, year, month, range) {
   let result = ""
 
   if(sourceBucket === SOURCE_BUCKETS.vxtprodOrVxttest003) {
     result = `${year}/${month}/`
   }
   else if(sourceBucket === SOURCE_BUCKETS.videoin01) {
-    result = `From Videographers/`
+    result = `From Videographers/${range || ''}`
   }
   else if(sourceBucket === SOURCE_BUCKETS.vxtzoom01) {
     result = `zoom/`

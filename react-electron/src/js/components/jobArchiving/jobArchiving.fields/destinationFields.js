@@ -7,7 +7,7 @@ const { SOURCE_BUCKETS, sourceToTargetBucketMappings } = JOB_ARCHIVING_CONSTANTS
 
 function DestinationFields() {
   //this.BrowseButton = BrowseButton.bind(this);
-
+ 
   if(this.state.sourceBucket === SOURCE_BUCKETS.videoin01) {
     return (
       <Form.Group as={Col} className="textFieldLabel" 
@@ -37,7 +37,7 @@ function DestinationFields() {
           </Form.Group> 
 
           <Form.Group as={Col} className="textFieldLabel" style={{minWidth:'55px'}}>
-            <Form.Label style={{paddingTop:'35px', color: 'darkgrey'}}>{this.state.jobNumber}</Form.Label>
+            <Form.Label style={{paddingTop:'35px', color: 'darkgrey'}}>{this.state.rangeDestinationFolder}</Form.Label>
           </Form.Group> 
  
         </Form.Row>

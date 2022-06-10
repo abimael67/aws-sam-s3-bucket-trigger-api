@@ -16,13 +16,13 @@ var config
 try {
   config = JSON.parse(File.getContent(JOB_ARCHIVING_CONSTANTS.CONFIG_FILE))
 }
-catch(error) {
+catch (error) {
   Logging.logError("Error trying to initialize jobArchiver's config. Error:", error)
 }
 console.log('CONFIGG: ', config)
 
 function getParentFolder(fileKey) {
-  if(fileKey[fileKey.length - 1] === "/") {
+  if (fileKey[fileKey.length - 1] === "/") {
     fileKey = fileKey.slice(0, -1)
   }
 
@@ -47,7 +47,7 @@ async function deleteParentFolderIfEmpty(
       Bucket: bucket,
       signatureVersion: signatureVersion,
       region: region
-    })   
+    })
 
     let parentFolder = getParentFolder(file.Key)
 
@@ -56,21 +56,21 @@ async function deleteParentFolderIfEmpty(
       Prefix: parentFolder
     }
 
-    s3.listObjectsV2(params, function(err, data) {
-      if(err) {
+    s3.listObjectsV2(params, function (err, data) {
+      if (err) {
         Logging.logError("error inside jobArchiver.deleteParentFolderIfEmpty during s3.deleteObject. error:", err)
       }
       else {
         Logging.info("Inside jobArchiver.deleteS3File during s3.deleteObject. copyData:", data)
 
-        if(defined(data, "Contents.length") && data.Contents.length === 1) {
+        if (defined(data, "Contents.length") && data.Contents.length === 1) {
           deleteS3File(bucket, parentFolder, region, accessKeyId, secretAccessKey, signatureVersion)
         }
 
       }
     })
   }
-  catch(error) {
+  catch (error) {
     Logging.logError("ERROR inside jobArchiver.deleteS3File. error:", error)
   }
 }
@@ -91,15 +91,15 @@ async function deleteS3File(
       Bucket: bucket,
       signatureVersion: signatureVersion,
       region: region
-    })   
+    })
 
     const params = {
       Bucket: bucket,
       Key: file.Key
     }
 
-    s3.deleteObject(params, function(err, deleteData) {
-      if(err) {
+    s3.deleteObject(params, function (err, deleteData) {
+      if (err) {
         Logging.logError("error inside jobArchiver.deleteS3File during s3.deleteObject. error:", err)
       }
       else {
@@ -110,7 +110,7 @@ async function deleteS3File(
       }
     })
   }
-  catch(error) {
+  catch (error) {
     Logging.logError("ERROR inside jobArchiver.deleteS3File. error:", error)
   }
 }
@@ -144,22 +144,47 @@ class JobArchiver {
     this.errorMsgList = [];
     this.continuePolling = true
 
-    this.dateDisplay = DateUtils.GetDateDisplay() 
-
-    try{
+    this.dateDisplay = DateUtils.GetDateDisplay()
+    this.rangeFolder = ''
+    try {
       this.archiveJob(this.sourceBucket, this.externalJobNumber, this.year, this.month, this.env)
     }
-    catch(e){
+    catch (e) {
       Logging.logError("ERROR in constructor method of JobArchiver. Error:", e)
     }
   }
 
   removeNonFiles(originalFiles) {
-    return originalFiles.slice().filter( file => !file.Key.endsWith("/") )
+    return originalFiles.slice().filter(file => !file.Key.endsWith("/"))
   }
 
   getFolders(originalFiles) {
-    return originalFiles.slice().filter( file => file.Key.endsWith("/") )
+    return originalFiles.slice().filter(file => file.Key.endsWith("/"))
+  }
+
+  getFoldersOnly(commonPrefixes, prefix) {
+    return commonPrefixes.slice()
+      .map(element =>
+        element.Prefix.substring(prefix.length - 1).replace('/', '')
+      )
+  }
+
+  async getCorrespondingRangeFolder() {
+    const { range, folders } = await this.getS3FileList('archive_originals', 'From Videographers/')
+    console.log('RangeFolders: ', range, folders)
+    let jobNumber = this.externalJobNumber
+    for (const folder of range) {
+      const from = folder.substring(0, folder.indexOf('-'))
+      const to = folder.substring(folder.indexOf('-') + 1, folder.length - 1)
+      if (from && to && !isNaN(from) && !isNaN(to)) {
+        if (jobNumber >= Number(from) && jobNumber <= Number(to)) {
+          console.log('pass: ', jobNumber, 'from: ', from, 'to:', to)
+          this.rangeFolder = folder
+          return folder
+        }
+      }
+    }
+    return ''
   }
 
   async getS3FileList(
@@ -181,27 +206,30 @@ class JobArchiver {
       })
 
       Logging.log("accessKeyId:", accessKeyId, "secretAccessKey:", secretAccessKey)
-      
+
       let params = {
-        Bucket:bucket,
-        Prefix: parentFolder
+        Bucket: bucket,
+        Prefix: parentFolder,
       }
 
-      const response = await s3.listObjectsV2(params).promise()
-
-      Logging.log("jobArchiver.getS3Files() response:", response)
-
-      let files = this.removeNonFiles(response.Contents)
-      let folders = this.getFolders(response.Contents)
+      const responseData = await s3.listObjectsV2(params).promise()
+      const responseStructure = await s3.listObjectsV2({ ...params, Delimiter: '/' }).promise()
+      Logging.log("jobArchiver.getS3Files() response:", responseData)
+      Logging.log("jobArchiver.getS3Files() responseStructure:", responseStructure)
+      let files = this.removeNonFiles(responseData.Contents)
+      let folders = this.getFolders(responseData.Contents)
+      let range = this.getFoldersOnly(responseStructure.CommonPrefixes, parentFolder)
       console.log('Folders: ', folders)
-      return { files, folders }
+      console.log('Range: ', range)
+      return { files, folders, range }
     }
-    catch(error) {
+    catch (error) {
       Logging.logError("ERROR inside JobArchiver.getFileList():", error)
       Logging.log("Error Printed separately:")
       Logging.log(error)
     }
   }
+
 
   async moveS3Files(
     sourceBucket,
@@ -224,26 +252,30 @@ class JobArchiver {
         signatureVersion: signatureVersion,
         region: region
       })
+      let rangeName = await this.getCorrespondingRangeFolder()
+      if (files.length && files.length > 0) {
+        let iterator = 0
+        ASYNC.each(files, (file, cb) => {
 
-      if(files.length && files.length > 0) {
-        ASYNC.each(files, function(file, cb) {
           let params = {
             Bucket: targetBucket,
             CopySource: `/${sourceBucket}/${file.Key}`,
             //Key: `${year}/${month}/${file.Key}`
-            Key: `${JOB_ARCHIVING_CONSTANTS.getDestinationParentDirectory(sourceBucket, year, month)}${file.Key}`
+            Key: `${JOB_ARCHIVING_CONSTANTS.getDestinationParentDirectory(sourceBucket, year, month, rangeName)}${file.Key}`
           }
-
-          s3.copyObject(params, function(copyErr, copyData) {
-            if(copyErr) {
+          s3.copyObject(params, (copyErr, copyData) => {
+            if (copyErr) {
               Logging.logError("ERROR inside jobArchiver.moveS3Files during s3.copyObject. error:", copyErr)
             }
             else {
+              iterator = iterator + 1
               Logging.info("Inside jobarchiver.moveS3Files during s3.copyObject. copyData:", copyData)
               cb()
               file.copyData = copyData
-
-            //  deleteS3File(sourceBucket, file, region, accessKeyId, secretAccessKey, signatureVersion)
+              //set status
+              this.jobArchivingStatus = `Success ${iterator} of ${files.length}`
+              store.dispatch(action(JOB_ARCHIVING_FINISHED, this.jobArchivingStatus))
+              //  deleteS3File(sourceBucket, file, region, accessKeyId, secretAccessKey, signatureVersion)
             }
           })
         })
@@ -252,7 +284,7 @@ class JobArchiver {
         Logging.warn("Inside jobArchiver.moveS3Files(). files list was empty. files:", files)
       }
     }
-    catch(error) {
+    catch (error) {
       Logging.logError("error inside jobArchiver.moveS3Files:", error)
     }
   }
@@ -285,19 +317,19 @@ class JobArchiver {
         region: region
       })
 
-      if(folders.length && folders.length > 0) {
+      if (folders.length && folders.length > 0) {
 
       }
 
       this.ShouldWeContinuePolling()
     }
-    catch(error) {
+    catch (error) {
       Logging.logError("error inside jobArchiver.deleteFolders:", error)
     }
   }
 
   ShouldWeContinuePolling() {
-    if(!this.continuePolling) {
+    if (!this.continuePolling) {
       clearInterval(this.IdOfTimerToPollForWhetherEmptyFoldersHaveBeenDeleted)
     }
   }
@@ -318,21 +350,21 @@ class JobArchiver {
     let timeoutTimeInMilliseconds = 60 * 1000
 
     this.IdOfTimerToPollForWhetherEmptyFoldersHaveBeenDeleted = setInterval(
-      ( () => { 
-          this.deleteFolders(
-            sourceBucket,
-            files,
-            JOB_ARCHIVING_CONSTANTS.sourceToTargetBucketMappings[sourceBucket],
-            //JOB_ARCHIVING_CONSTANTS[env].TARGET_BUCKET,
-            folders,
-            year,
-            month,
-            config.region,
-            config.accessKeyId,
-            config.secretAccessKey,
-            'v4'
-          )
-        }
+      (() => {
+        this.deleteFolders(
+          sourceBucket,
+          files,
+          JOB_ARCHIVING_CONSTANTS.sourceToTargetBucketMappings[sourceBucket],
+          //JOB_ARCHIVING_CONSTANTS[env].TARGET_BUCKET,
+          folders,
+          year,
+          month,
+          config.region,
+          config.accessKeyId,
+          config.secretAccessKey,
+          'v4'
+        )
+      }
       ),
       timeoutTimeInMilliseconds
     )
@@ -343,13 +375,13 @@ class JobArchiver {
     return SUCCESS
   }
 
-  async archiveJob(sourceBucket, externalJobNumber, year, month, env){
+  async archiveJob(sourceBucket, externalJobNumber, year, month, env) {
     let newJobArchivingStatus = ""
 
-    try{
+    try {
       // GET LIST OF FILES TO BE MOVED
       let { files, folders } = await this.getS3FileList(sourceBucket, externalJobNumber)
-        
+
       //MOVE FILES
       await this.moveS3Files(
         sourceBucket,
@@ -381,14 +413,14 @@ class JobArchiver {
       //SET STATUS
       newJobArchivingStatus = await this.setStatus(files)
     }
-    catch(e){
+    catch (e) {
       newJobArchivingStatus = ERROR
       //^^//console.log(`Error archiving job. Error: ${e}`)
       this.errorMsgList = { error: e }
       Logging.log("ERROR in jobArchiver.archiveJob():", e)
     }
 
-    this.jobArchivingStatus = newJobArchivingStatus
+    // this.jobArchivingStatus = newJobArchivingStatus
 
     store.dispatch(action(JOB_ARCHIVING_FINISHED, newJobArchivingStatus))
   }

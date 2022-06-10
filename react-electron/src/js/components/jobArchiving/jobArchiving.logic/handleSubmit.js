@@ -10,32 +10,23 @@ async function handleSubmit(event) {
   event.preventDefault();
   //^^//console.log("Inside Job Archiving handleSubmit()...")
   let currentId = uuidv4()
-  let jobArchiver2 = new JobArchiver({sourceBucket:'vxtprod', externalJobNumber:'9000001',
 
-  year: this.state.year,
-  month: this.state.month,
-  assignedUserEmail: 'jmartinez@veritext.com',
-  contactName: 'Jose',
-  contactEmail: 'jmartinez@veritext.com',
-  contactPhone:'00',
-  id: currentId});
-  jobArchiver2.getS3FileList('vxtprod','9000001')
-  
-  return
+
   let storeState = window.store.getState()
 
   //^^//console.log(storeState)
-  
+
   let errorPresent = this.ValidateJobArchivingFields();
 
+ 
   try {
-    if(false === false) {
+    if (errorPresent === false) {
 
       // ARCHIVE JOB
       //TODO: Implement
-      if(defined(storeState.user)){
+      if (defined(storeState.user)) {
         storeState.user.resetLastTimeOfActivity()
-       
+
 
         let jobArchiver = new JobArchiver({
           sourceBucket: this.state.sourceBucket,
@@ -48,19 +39,19 @@ async function handleSubmit(event) {
           contactPhone: storeState.user.contactPhone,
           id: currentId
         })
-        
+
         this.props.AddArchivedJob({
           id: currentId,
           jobNumber: this.state.jobNumber,
-          jobArchiver: jobArchiver2,
+          jobArchiver: jobArchiver,
           date: date
         })
-        
+
         this.setState((state, props) => ({
           ...getConstructorState(),
           errors: state.errors
         }))
-      } 
+      }
       else {
         alert("You are not logged in. Please log in and try again.");
       }
@@ -72,10 +63,10 @@ async function handleSubmit(event) {
     else {
       Logging.error(null, "Job Archiving handleSubmit errorsPresent:", errorPresent)
     }
-  
+
   } catch (error) {
     let e = null;
-    !error.message ? e = { "message" : error } : e = error;
+    !error.message ? e = { "message": error } : e = error;
     this.setState({
       errors: {
         ...this.state.errors,

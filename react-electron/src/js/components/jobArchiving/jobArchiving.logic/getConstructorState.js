@@ -8,7 +8,8 @@ function getConstructorState() {
     jobNumber: "",
     year: "",
     month: "",
-    errors: {}
+    errors: {},
+    rangeDestinationFolder: ""
   }
 }
 

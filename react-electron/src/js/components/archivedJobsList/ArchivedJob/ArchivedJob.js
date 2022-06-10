@@ -46,10 +46,11 @@ class ConnectedArchivedJob extends Component {
     }
 
     let { jobArchiver } = this.ArchivedJobObject
-    
+
     return (
       <ListGroup.Item
-        style={{borderTopWidth:'1px'}}
+        style={{borderTopWidth:'1px',
+          backgroundColor: this.selectBackgroundColor()}}
         className={
           'listItemGroupItem' 
           + ' ' + jobClasses
@@ -70,7 +71,7 @@ class ConnectedArchivedJob extends Component {
         <Row className="JobNumber">
           <Col style={{maxWidth:'140px', padding:'0px'}}><u>Destination:</u></Col>
           <Col style={{padingLeft:'10px'}}>
-            {sourceToTargetBucketMappings[jobArchiver.sourceBucket]}/{getDestinationParentDirectory(jobArchiver.sourceBucket, jobArchiver.year, jobArchiver.month)}{this.ArchivedJobObject.jobNumber}
+            {sourceToTargetBucketMappings[jobArchiver.sourceBucket]}/{getDestinationParentDirectory(jobArchiver.sourceBucket, jobArchiver.year, jobArchiver.month, jobArchiver.rangeFolder)}{this.ArchivedJobObject.jobNumber}
           </Col>
         </Row>
 

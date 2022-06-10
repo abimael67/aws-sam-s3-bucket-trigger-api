@@ -3,7 +3,8 @@ import { COLOR_SUCCESS, COLOR_ERROR } from './../../../../constants/list_item_co
 
 function selectBackgroundColor(){
   let status = this.ArchivedJobObject.jobArchiver.jobArchivingStatus
-  
+
+  status = status.includes('Success') ? 'Success' : status
   switch (status) {
     case SUCCESS:
       if(this.props.jobOrdinalNumber%2 === 1){
