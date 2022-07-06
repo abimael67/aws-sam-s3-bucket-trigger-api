@@ -26,18 +26,30 @@ function getRangeFolders(commonPrefixes, prefix) {
 }
 
 export default async function getCorrespondingRangeFolder(jobNumber) {
-  const rangeFolders = (await getS3Content('archive_originals', 'From Videographers/')).range
+  const destinationBucket = JOB_ARCHIVING_CONSTANTS.DESTINATION_BUCKETS.archive_originals
+  const bucket = destinationBucket
+  const parentFolder = 'From Videographers/'
+  const rangeFolders = (await getS3Content(bucket, parentFolder)).range
   for (const folder of rangeFolders) {
     const from = folder.substring(0, folder.indexOf('-'))
     const to = folder.substring(folder.indexOf('-') + 1, folder.length - 1)
     if (from && to && !isNaN(from) && !isNaN(to)) {
       if (jobNumber >= Number(from) && jobNumber <= Number(to)) {
         console.log('pass: ', jobNumber, 'from: ', from, 'to:', to)
-        return folder
+        return {folder: folder.substring(0, folder.length - 1), create: false}
       }
     }
   }
-  return ''
+  let folder = generateRangeFolderName(jobNumber)
+  console.log('Generated: ', folder)
+  return {folder, create: true}
+}
+
+function generateRangeFolderName(jobNumber) {
+  const interval = 50000
+  let from = Math.floor(jobNumber / interval) * interval;
+  let to = from + (interval - 1)
+  return `${from}-${to}`
 }
 
 
@@ -70,7 +82,7 @@ async function getS3Content(
 
     const response = await s3.listObjectsV2(params).promise()
 
-    Logging.log("jobArchiver.getS3Files() response:", response)
+    Logging.log("getCorrespondingRangeFolder.getS3Content() response:", response)
 
     let files = removeNonFiles(response.Contents)
     let folders = getFolders(response.Contents)
@@ -79,9 +91,11 @@ async function getS3Content(
     return { files, folders, range }
   }
   catch (error) {
-    Logging.logError("ERROR inside JobArchiver.getFileList():", error)
+    Logging.logError("ERROR inside getCorrespondingRangeFolder.getS3Content():", error)
     Logging.log("Error Printed separately:")
     Logging.log(error)
   }
 }
+
+
 

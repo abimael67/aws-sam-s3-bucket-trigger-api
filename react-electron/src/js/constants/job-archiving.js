@@ -1,19 +1,19 @@
 import STRING_CONSTANTS from './string'
 import ENVS from './environments'
 import getEnv from './../utils/get-env'
-
+import isDev from '../utils/is-dev'
 const SOURCE_BUCKETS = {
-  vxtprodOrVxttest003: (getEnv() === ENVS.PROD ? "vxtprod" : "vxttest003"),
-  videoin01: "videoin01",
+  vxtprod:  "vxtprod",
+  videoin01: isDev ? "vxttest003" : "videoin01",
   vxtzoom01: "vxtzoom01"
 }
 const DESTINATION_BUCKETS = {
   vxtarcOrVxttest004: (getEnv() === ENVS.PROD ? "vxtarc" : "vxttest004"),
-  archive_originals: "archive_originals"
+  archive_originals: isDev ? "vxttest004" : "archive_originals"
 }
 
 const sourceToTargetBucketMappings = {
-  [SOURCE_BUCKETS.vxtprodOrVxttest003]: DESTINATION_BUCKETS.vxtarcOrVxttest004,
+  [SOURCE_BUCKETS.vxtprod]: DESTINATION_BUCKETS.vxtarcOrVxttest004,
   [SOURCE_BUCKETS.videoin01]: DESTINATION_BUCKETS.archive_originals,
   [SOURCE_BUCKETS.vxtzoom01]: DESTINATION_BUCKETS.archive_originals
 }
@@ -22,12 +22,14 @@ const sourceToTargetBucketMappings = {
 
 function getDestinationParentDirectory(sourceBucket, year, month, range) {
   let result = ""
-
-  if(sourceBucket === SOURCE_BUCKETS.vxtprodOrVxttest003) {
+console.log('Condition: ', sourceBucket, year, month, range)
+  if(sourceBucket === SOURCE_BUCKETS.vxtprod) {
+    console.log('entro1')
     result = `${year}/${month}/`
   }
   else if(sourceBucket === SOURCE_BUCKETS.videoin01) {
-    result = `From Videographers/${range || ''}`
+    console.log('entro2')
+    result = `From Videographers/${range || ''}/`
   }
   else if(sourceBucket === SOURCE_BUCKETS.vxtzoom01) {
     result = `zoom/`
@@ -41,11 +43,12 @@ function getDestinationParentDirectory(sourceBucket, year, month, range) {
 const JOB_ARCHIVING_CONSTANTS = {
   CONFIG_FILE: `${STRING_CONSTANTS.USER_DATA_FOLDER}\\private\\MPEG1_CONVERSION_CONFIG.json`,
   SOURCE_BUCKETS,
-  DEFAULT_SOURCE_BUCKET: SOURCE_BUCKETS.vxtprodOrVxttest003,
+  DEFAULT_SOURCE_BUCKET: SOURCE_BUCKETS.vxtprod,
   //SOURCE_BUCKET: "vxtprod",
   //TARGET_BUCKET: "vxtarc",
   sourceToTargetBucketMappings,
   getDestinationParentDirectory,
+  DESTINATION_BUCKETS,
   /*
   ENVS: {
     TEST_ENV: "TEST_ENV",

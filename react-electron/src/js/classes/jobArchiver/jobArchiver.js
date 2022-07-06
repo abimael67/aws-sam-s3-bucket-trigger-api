@@ -170,7 +170,8 @@ class JobArchiver {
   }
 
   async getCorrespondingRangeFolder() {
-    const { range, folders } = await this.getS3FileList('archive_originals', 'From Videographers/')
+    const destinationBucket = JOB_ARCHIVING_CONSTANTS.DESTINATION_BUCKETS.archive_originals
+    const { range, folders } = await this.getS3FileList(destinationBucket, 'From Videographers/')
     console.log('RangeFolders: ', range, folders)
     let jobNumber = this.externalJobNumber
     for (const folder of range) {
@@ -178,13 +179,22 @@ class JobArchiver {
       const to = folder.substring(folder.indexOf('-') + 1, folder.length - 1)
       if (from && to && !isNaN(from) && !isNaN(to)) {
         if (jobNumber >= Number(from) && jobNumber <= Number(to)) {
-          console.log('pass: ', jobNumber, 'from: ', from, 'to:', to)
-          this.rangeFolder = folder
-          return folder
+          console.log('Folder acquired: ',  folder.substring(0, folder.length - 1))
+          this.rangeFolder = folder.substring(0, folder.length - 1)
+          return {folder: this.rangeFolder, create: false}
         }
       }
     }
-    return ''
+    let folder = this.generateRangeFolderName(jobNumber)
+    console.log('Generated2: ', folder)
+    this.rangeFolder = folder
+    return {folder, create: true}
+  }
+  generateRangeFolderName(jobNumber) {
+    const interval = 50000
+    let from = Math.floor(jobNumber / interval) * interval;
+    let to = from + (interval - 1)
+    return `${from}-${to}`
   }
 
   async getS3FileList(
@@ -252,17 +262,23 @@ class JobArchiver {
         signatureVersion: signatureVersion,
         region: region
       })
-      let rangeName = await this.getCorrespondingRangeFolder()
+      let {folder} = await this.getCorrespondingRangeFolder()
+      let rangeName = folder
+            // if (range.create) {
+      //   await this.addObjectToS3(targetBucket, )
+      // }
       if (files.length && files.length > 0) {
         let iterator = 0
+        store.dispatch(action(JOB_ARCHIVING_FINISHED, ARCHIVING_JOB))
         ASYNC.each(files, (file, cb) => {
-
           let params = {
             Bucket: targetBucket,
             CopySource: `/${sourceBucket}/${file.Key}`,
             //Key: `${year}/${month}/${file.Key}`
             Key: `${JOB_ARCHIVING_CONSTANTS.getDestinationParentDirectory(sourceBucket, year, month, rangeName)}${file.Key}`
           }
+          console.log('PARAMS: ', params)
+          store.dispatch(action(JOB_ARCHIVING_FINISHED, ARCHIVING_JOB))
           s3.copyObject(params, (copyErr, copyData) => {
             if (copyErr) {
               Logging.logError("ERROR inside jobArchiver.moveS3Files during s3.copyObject. error:", copyErr)
@@ -287,6 +303,45 @@ class JobArchiver {
     catch (error) {
       Logging.logError("error inside jobArchiver.moveS3Files:", error)
     }
+  }
+
+  async addObjectToS3(bucket,
+    parentFolder,
+    objectName,
+    region = config.region,
+    accessKeyId = config.accessKeyId,
+    secretAccessKey = config.secretAccessKey,
+    signatureVersion = 'v4') {
+
+    try {
+      const s3 = new aws.S3({
+        endpoint: `s3.${config.region}.amazonaws.com`,
+        accessKeyId: accessKeyId,
+        secretAccessKey: secretAccessKey,
+        Bucket: bucket,
+        signatureVersion: signatureVersion,
+        region: region
+      })
+
+      Logging.log("accessKeyId:", accessKeyId, "secretAccessKey:", secretAccessKey)
+
+      let params = {
+        Key: parentFolder + '/' + objectName
+      }
+
+      const response = await s3.putObject(params).promise()
+      console.log('Added object!')
+      Logging.log("getCorrespondingRangeFolder.addObjectToS3() response:", response)
+
+      return true
+    }
+    catch (error) {
+      Logging.logError("ERROR inside getCorrespondingRangeFolder.addObjectToS3():", error)
+      Logging.log("Error Printed separately:")
+      Logging.log(error)
+      return false
+    }
+
   }
 
   async deleteFolders(
@@ -422,7 +477,7 @@ class JobArchiver {
 
     // this.jobArchivingStatus = newJobArchivingStatus
 
-    store.dispatch(action(JOB_ARCHIVING_FINISHED, newJobArchivingStatus))
+   // store.dispatch(action(JOB_ARCHIVING_FINISHED, newJobArchivingStatus))
   }
 }
 

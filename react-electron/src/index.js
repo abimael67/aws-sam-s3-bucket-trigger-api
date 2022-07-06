@@ -15,7 +15,7 @@ import isDev from './js/utils/is-dev'
 //const isDev = window.require('electron-is-dev');
 let environment = ''
 
-if(isDev) {
+if(false) {
   environment = DEV
 }
 else {

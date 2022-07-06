@@ -12,11 +12,13 @@ import './../Auth.scss'
 
 var DEV_CREDENTIALS
 try {
+  console.log('isDev: ',isDev)
   if(isDev) {
     DEV_CREDENTIALS = JSON.parse(File.getContent(AUTH_CONSTANTS.DEV_CREDENTIALS))
   }
-}
+} 
 catch(error) {
+  console.log('Dev Cred Error: ', error)
   Logging.logError("Error trying to initialize auth.login.logic.getConstructorState's dev credentials. Error:", error)
 }
 
@@ -24,7 +26,7 @@ async function logInForDev(loginComponent) {
   console.log("this.state:")
   console.log(loginComponent.state)
   console.log("DEV_CREDENTIALS:")
-  console.log(DEV_CREDENTIALS)
+  console.log(DEV_CREDENTIALS) 
 
 
   if(isDev && loginComponent.state.username === DEV_CREDENTIALS.username && loginComponent.state.password === DEV_CREDENTIALS.password) {

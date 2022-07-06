@@ -10,7 +10,7 @@ const path = require("path");
 const isDev = require("electron-is-dev");
 let mainWindow;
 
-let allowDevTools = true;
+let allowDevTools = false;
 if(isDev) {
   allowDevTools = true;
 }
