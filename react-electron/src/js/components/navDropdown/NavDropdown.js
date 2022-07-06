@@ -21,6 +21,8 @@ const CONVERSION = 'conversion'
 const CONVERSION_ROUTE = '/conversion'
 const DRC = 'DRC'
 const DRC_ROUTE = '/drc'
+const GLEEM = 'GLEEM'
+const GLEEM_ROUTE = '/embeddedweb'
 const LOGIN = 'Log in'
 const LOGIN_ROUTE = '/login'
 
@@ -35,6 +37,7 @@ dropdownRouteMappings[LOGIN] = LOGIN_ROUTE
 dropdownRouteMappings[MPEG_CONVERSION] = MPEG_CONVERSION_ROUTE
 dropdownRouteMappings[LOCAL_DOWNLOAD] = LOCAL_DOWNLOAD_ROUTE
 dropdownRouteMappings[CONVERSION] = CONVERSION_ROUTE
+dropdownRouteMappings[GLEEM] = GLEEM_ROUTE
 
 function handleSelect(that, eventKey) {
   that.props.history.push(dropdownRouteMappings[eventKey]);
@@ -72,6 +75,8 @@ function NavDropdownComponent() {
         <NavDropdown.Item eventKey={JOB_ARCHIVING}>{JOB_ARCHIVING}</NavDropdown.Item>
         <NavDropdown.Divider />
         <NavDropdown.Item eventKey={LOGIN}>{LOGIN}</NavDropdown.Item>
+        <NavDropdown.Divider />
+        <NavDropdown.Item eventKey={GLEEM}>{GLEEM}</NavDropdown.Item>
       </NavDropdown>
     </Nav>
   );

@@ -19,6 +19,7 @@ import About from './../../../pages/about'
 import Documentation from './../../../pages/documentation'
 import CheckUserActivity from './../../utils/checkUserActivity'
 import mapStateToProps from './mapStateToProps'
+import EmbeddedWeb from './../embeddedweb/EmbeddedWeb'
 
 class ConnectedThemeWrapper extends Component {
   constructor(props) {
@@ -63,6 +64,7 @@ class ConnectedThemeWrapper extends Component {
         <Route path="/filestitchingqa" component={FileStitching} />
         <Route path="/mpegconversion" component={MpegConversion} />
         <Route path="/localdownload" component={LocalDownload} />
+        <Route path="/embeddedweb" component={EmbeddedWeb} />
         <Route path="/drc" component={Login} />
         <FooterBar />
       </Container>

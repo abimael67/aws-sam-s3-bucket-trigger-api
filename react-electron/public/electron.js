@@ -38,7 +38,8 @@ async function createWindow() {
       nodeIntegration: true,
       //devTools: allowDevTools
       devTools: true,
-      additionalArguments: [app.getPath('userData')]
+      additionalArguments: [app.getPath('userData')],
+      webviewTag: true
     }
   });
 
