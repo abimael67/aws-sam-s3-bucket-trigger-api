@@ -29,8 +29,9 @@ class WithRouterTitleBar extends Component {
   onCloseClicked(e) {
     currentWindow.close()
   }
-
+  
   render(){
+    console.log(this.props.location.pathname)
     return (
       <Row id="title-bar" >
         <img  id="small-icon" src={process.env.PUBLIC_URL + '/favicon.ico'} alt="app icon"/>
@@ -40,7 +41,9 @@ class WithRouterTitleBar extends Component {
         <Col >
           <div style={{paddingTop:'5px'}}>v {process.env.REACT_APP_VERSION}</div>
         </Col>
-          { this.NavDropdown() }
+       
+          { this.props.location.pathname !== '/embeddedweb' && this.NavDropdown() }
+         
         <div id="title-bar-btns" style={{transition:'background-color 0.25s ease'}}>
           <Button 
             variant="info" 

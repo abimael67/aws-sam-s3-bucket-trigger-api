@@ -37,6 +37,7 @@
 .navDropdownWrapper {
   -webkit-app-region: no-drag;
   transform: translate(-160px, 0);
+  z-index: 500;
 }
 
 .dropdown-item {
