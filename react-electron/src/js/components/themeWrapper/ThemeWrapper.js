@@ -20,6 +20,7 @@ import Documentation from './../../../pages/documentation'
 import CheckUserActivity from './../../utils/checkUserActivity'
 import mapStateToProps from './mapStateToProps'
 import EmbeddedWeb from './../embeddedweb/EmbeddedWeb'
+import NavMenuBar from '../menubar/NavMenuBar'
 
 class ConnectedThemeWrapper extends Component {
   constructor(props) {
@@ -49,8 +50,11 @@ class ConnectedThemeWrapper extends Component {
         className = { className } 
         style={{height:'100%'}}
       >
+         <TitleBar />
+        
       <Container xs={12} className="windowContainer" >
-        <TitleBar />
+       <span><NavMenuBar /></span>
+      
         <Route exact path="/" component={Login} />
         <Route path="/login" component={Login} />
         <Route path="/changepassword" component={ChangePassword} />

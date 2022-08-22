@@ -46,7 +46,7 @@ async function createWindow() {
   if(!allowDevTools) {
     //mainWindow.webContents.on("devtools-opened", () => { mainWindow.webContents.closeDevTools(); });
   }
-  mainWindow.webContents.openDevTools()
+ // mainWindow.webContents.openDevTools()
 
   const hideSplashscreen = initSplashScreen({
     mainWindow,
