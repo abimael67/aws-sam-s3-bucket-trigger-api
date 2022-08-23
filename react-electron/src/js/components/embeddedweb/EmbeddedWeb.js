@@ -13,7 +13,7 @@ function WithRouterEmbeddedWeb(props) {
     )
     window.setBrowserView(view);
     view.setAutoResize({ width: true, height: true });
-    view.setBounds({ x: 0, y: 70, width: 1000, height: 700 });
+    view.setBounds({ x: 0, y: 70, width: 1000, height: 800 });
 
     view.webContents.loadURL("http://10.250.32.158:5000");
 

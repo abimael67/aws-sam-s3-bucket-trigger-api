@@ -17,10 +17,10 @@ function Clean(field) {
 function CheckForEmptyFields() {
   let areThereEmptyFields = true;
   const { sourceBucket, jobNumber, year, month } = this.state;
-
+console.log('SB: ', sourceBucket)
   if(
     (
-      sourceBucket === SOURCE_BUCKETS.vxtprodOrVxttest003
+      sourceBucket === SOURCE_BUCKETS.vxtprod
       && Clean(jobNumber) !== ''
       && Clean(year) !== ''
       && Clean(month) !== ''
@@ -32,7 +32,7 @@ function CheckForEmptyFields() {
   ) {
     areThereEmptyFields = false;
   }
-
+console.log('EMPTY: ', areThereEmptyFields)
   return areThereEmptyFields;
 }
 

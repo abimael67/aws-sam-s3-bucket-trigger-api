@@ -14,7 +14,7 @@ let allowDevTools = false;
 if(isDev) {
   allowDevTools = true;
 }
-
+allowDevTools = false;
 async function createWindow() {
   //^^//console.log("Creating Window...")
   //^^//console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
@@ -45,9 +45,10 @@ async function createWindow() {
 
   if(!allowDevTools) {
     //mainWindow.webContents.on("devtools-opened", () => { mainWindow.webContents.closeDevTools(); });
+  }else{
+    mainWindow.webContents.openDevTools()
   }
- // mainWindow.webContents.openDevTools()
-
+ 
   const hideSplashscreen = initSplashScreen({
     mainWindow,
     icon: `file://${path.join(__dirname, "../public/icon.ico")}`,

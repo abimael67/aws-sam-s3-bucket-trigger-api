@@ -29,7 +29,7 @@ async function logInForDev(loginComponent) {
   console.log(DEV_CREDENTIALS) 
 
 
-  if(isDev && loginComponent.state.username === DEV_CREDENTIALS.username && loginComponent.state.password === DEV_CREDENTIALS.password) {
+  if(isDev && DEV_CREDENTIALS && loginComponent.state.username === DEV_CREDENTIALS.username && loginComponent.state.password === DEV_CREDENTIALS.password) {
     await loginComponent.handleSubmit()
     await loginComponent.handleConfirm()
   }

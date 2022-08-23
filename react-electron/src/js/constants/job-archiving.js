@@ -24,11 +24,9 @@ function getDestinationParentDirectory(sourceBucket, year, month, range) {
   let result = ""
 console.log('Condition: ', sourceBucket, year, month, range)
   if(sourceBucket === SOURCE_BUCKETS.vxtprod) {
-    console.log('entro1')
     result = `${year}/${month}/`
   }
   else if(sourceBucket === SOURCE_BUCKETS.videoin01) {
-    console.log('entro2')
     result = `From Videographers/${range || ''}/`
   }
   else if(sourceBucket === SOURCE_BUCKETS.vxtzoom01) {
