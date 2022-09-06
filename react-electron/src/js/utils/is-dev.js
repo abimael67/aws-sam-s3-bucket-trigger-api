@@ -3,7 +3,7 @@ import defined from './defined'
 
 function isDevFunc() {
   const nodeEnv = process.env.NODE_ENV
-  let result = true
+  let result = false
   return result
 
   console.log("nodeEnv:")
