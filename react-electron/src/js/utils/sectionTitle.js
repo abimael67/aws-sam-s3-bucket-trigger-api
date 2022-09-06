@@ -18,6 +18,7 @@ function SectionTitle(title, fontSizeParam) {
         >
           {title}
         </Form.Label>
+              
       </Form.Row>
     </Fragment>
   )
