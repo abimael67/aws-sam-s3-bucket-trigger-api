@@ -14,14 +14,6 @@
       "contactPhone": "9735494532",
       "assignedUserEmail": "YLAJ-AJ-QCuser@yeslaw.net"
     },
-   
-    {
-      "username": "nocampo",
-      "contactName": "Nathan Ocampo",
-      "contactEmail": "nocampo@veritext.com",
-      "contactPhone": "9492273145",
-      "assignedUserEmail": "YLAJ-AJ-QCuser@yeslaw.net"
-    },
     {
       "username": "pvazquez",
       "contactName": "Phil Vazquez",
@@ -79,6 +71,13 @@
       "contactName": "Nathan Ocampo",
       "contactEmail": "nocampo@veritext.com",
       "contactPhone": "9492273145",
+      "assignedUserEmail": "YLAJ-AJ-QCuser@yeslaw.net"
+    },
+    {
+      "username": "atorres",
+      "contactName": "Alfredo Torres",
+      "contactEmail": "atorres@veritext.com",
+      "contactPhone": "9495700658",
       "assignedUserEmail": "YLAJ-AJ-QCuser@yeslaw.net"
     },
     {
