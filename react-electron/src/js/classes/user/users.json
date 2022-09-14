@@ -1,4 +1,4 @@
- {
+{
   "dev": [
     {
       "username": "max.albrecht",
@@ -63,7 +63,7 @@
       "contactName": "Phil Vazquez",
       "contactEmail": "pvazquez@veritext.com",
       "contactPhone": "9739572378",
-      "assignedUserEmail": "YLAJ-AJ-QCuser@yeslaw.net"
+      "assignedUserEmail": "pvazquez@veritext.com"
     },
     
     {
@@ -71,14 +71,14 @@
       "contactName": "Nathan Ocampo",
       "contactEmail": "nocampo@veritext.com",
       "contactPhone": "9492273145",
-      "assignedUserEmail": "YLAJ-AJ-QCuser@yeslaw.net"
+      "assignedUserEmail": "nocampo@veritext.com"
     },
     {
       "username": "atorres",
       "contactName": "Alfredo Torres",
       "contactEmail": "atorres@veritext.com",
       "contactPhone": "9495700658",
-      "assignedUserEmail": "YLAJ-AJ-QCuser@yeslaw.net"
+      "assignedUserEmail": "atorres@veritext.com"
     },
     {
       "username": "ddasilva",
