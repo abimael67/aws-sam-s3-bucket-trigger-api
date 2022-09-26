@@ -35,14 +35,14 @@ class ConnectedJobArchiving extends Component {
           <Col xs={6} style={{paddingBottom:'20px', display:'flex', flexDirection:'column'}}>
             <Form.Row style={{maxHeight:'35px'}}>{ SectionTitle('Store (alpha version)' ) }</Form.Row>
             <Form.Row style={{marginTop:'20px'}}>{ this.SourceFields() }</Form.Row>
-            <Form.Row style={{marginTop:'15px'}}>{ this.DestinationFields() }</Form.Row>
+            {/* <Form.Row style={{marginTop:'15px'}}>{ this.DestinationFields() }</Form.Row> */}
             <Form.Row style={{maxHeight:'20px'}}>{ this.FormErrors() }</Form.Row>
             <Form.Row style={{maxHeight:'35px'}}>{ this.ArchiveJobButton() }</Form.Row>
           </Col>
           
           <Col xs={6} className="submittedJobsCol">
             <ArchivedJobsList />
-          </Col>
+          </Col> 
         </Form.Row>
       </Form>
       </div>

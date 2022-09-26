@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react'
-import { Form } from 'react-bootstrap'
+import { Form, ListGroup, ProgressBar } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { ListGroup } from 'react-bootstrap'
 import './ArchivedJobsList.scss'
 import ArchivedJob from './ArchivedJob/ArchivedJob'
 import { Scrollbars } from 'react-custom-scrollbars'
@@ -67,6 +66,7 @@ class ConnectedArchivedJobsList extends Component {
  render() {
    //^^//console.log("rendering archived jobs list group...")
 
+   console.log('UK: ', this.props)
    let jobOrdinalNumber = 0
 
    return (
@@ -86,6 +86,17 @@ class ConnectedArchivedJobsList extends Component {
               }
             )
           }
+          {
+            this.props.archivingProgress > 0 &&
+          
+          <ListGroup.Item>
+            <ProgressBar animated 
+                        now={this.props.archivingProgress}
+                        label={`${this.props.archivingProgress.toFixed(2)}%`}
+                        variant={this.props.archivingProgress === 100 ? 'success' : 'info'}
+                        />
+          </ListGroup.Item>
+ }
          </ListGroup>
        </Scrollbars>
      </Fragment>

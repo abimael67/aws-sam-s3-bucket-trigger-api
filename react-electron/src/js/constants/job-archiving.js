@@ -22,7 +22,6 @@ const sourceToTargetBucketMappings = {
 
 function getDestinationParentDirectory(sourceBucket, year, month, range) {
   let result = ""
-console.log('Condition: ', sourceBucket, year, month, range)
   if(sourceBucket === SOURCE_BUCKETS.vxtprod) {
     result = `${year}/${month}/`
   }

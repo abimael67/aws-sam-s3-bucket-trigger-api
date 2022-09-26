@@ -23,6 +23,7 @@ import {
   DRAGGING_JOB,
   ADD_ARCHIVED_JOB,
   JOB_ARCHIVING_FINISHED,
+  JOB_ARCHIVING_PROGRESS,
   ADD_STITCHED_FILE,
   ADD_MPEG_CONVERSION_JOB,
   MPEG_CONVERSION_THIRD_PARTY_JOB_CREATED,
@@ -39,6 +40,7 @@ const getInitialState = () => ({
   theme: getPreferredTheme(),
   lastTimeOfActivity: new Date(),
   archivedJobs: [],
+  archivingProgress: 0,
   stitchedFiles: [],
   mpegConversionVeriSuiteJobs: []
 });
@@ -95,7 +97,9 @@ function rootReducer(state = getInitialState(), action) {
       return AddArchivedJobReducer(state, action)
     case JOB_ARCHIVING_FINISHED:
       return JobArchivingFinishedReducer(state, action)
-
+    case JOB_ARCHIVING_PROGRESS:
+      return JobArchivingProgressReducer(state, action)
+      
     case ADD_STITCHED_FILE:
       return AddStitchedFileReducer(state, action)
 //ADD_MPEG_CONVERSION_JOB
@@ -254,6 +258,18 @@ function JobArchivingFinishedReducer(state, action) {
     {
       ...state,
       archivedJobs: state.archivedJobs
+    }
+  )
+}
+
+function JobArchivingProgressReducer(state, action) {
+  console.log('Red: ', action)
+  return Object.assign(
+    {},
+    state,
+    {
+      ...state,
+      archivingProgress: action.payload
     }
   )
 }

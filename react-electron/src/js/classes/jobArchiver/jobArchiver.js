@@ -1,4 +1,4 @@
-import { JOB_ARCHIVING_FINISHED } from './../../constants/action-types'
+import { JOB_ARCHIVING_FINISHED, JOB_ARCHIVING_PROGRESS } from './../../constants/action-types'
 import { action } from './../../utils/action'
 import { SUCCESS, ERROR, ARCHIVING_JOB } from './../../constants/job_archiving_statuses'
 import DateUtils from './../../utils/date-utils'
@@ -29,6 +29,14 @@ function getParentFolder(fileKey) {
   let result = `${fileKey.substr(0, fileKey.lastIndexOf('/'))}/`
 
   return result
+}
+
+function calculateTransferProgress(allFiles, currentFile, currentProgress){
+  const totalFiles = allFiles.length;
+  const totalSize = allFiles.reduce((acc, curr)=> acc + curr.Size, 0)
+  console.log("TRL: ", totalFiles, totalSize, " ",(currentFile.Size / totalSize * 100))
+  console.log('Progress: ',  currentProgress + (currentFile.Size / totalSize * 100))
+  return currentProgress + (currentFile.Size / totalSize * 100)
 }
 
 async function deleteParentFolderIfEmpty(
@@ -143,7 +151,7 @@ class JobArchiver {
     this.jobArchivingStatus = ARCHIVING_JOB;
     this.errorMsgList = [];
     this.continuePolling = true
-
+    this.currentFile = null;
     this.dateDisplay = DateUtils.GetDateDisplay()
     this.rangeFolder = ''
     try {
@@ -240,7 +248,7 @@ class JobArchiver {
     }
   }
 
-
+ 
   async moveS3Files(
     sourceBucket,
     files,
@@ -269,6 +277,7 @@ class JobArchiver {
       // }
       if (files.length && files.length > 0) {
         let iterator = 0
+        let progress = 0
         store.dispatch(action(JOB_ARCHIVING_FINISHED, ARCHIVING_JOB))
         ASYNC.each(files, (file, cb) => {
           let params = {
@@ -277,6 +286,9 @@ class JobArchiver {
             //Key: `${year}/${month}/${file.Key}`
             Key: `${JOB_ARCHIVING_CONSTANTS.getDestinationParentDirectory(sourceBucket, year, month, rangeName)}${file.Key}`
           }
+          this.currentFile = file
+          console.log('FILE: ', file)
+          //get size prop from file
           console.log('PARAMS: ', params)
           store.dispatch(action(JOB_ARCHIVING_FINISHED, ARCHIVING_JOB))
           s3.copyObject(params, (copyErr, copyData) => {
@@ -289,7 +301,9 @@ class JobArchiver {
               cb()
               file.copyData = copyData
               //set status
+              progress = calculateTransferProgress(files, file, progress)
               this.jobArchivingStatus = `Success ${iterator} of ${files.length}`
+              store.dispatch(action(JOB_ARCHIVING_PROGRESS, progress))
               store.dispatch(action(JOB_ARCHIVING_FINISHED, this.jobArchivingStatus))
               //  deleteS3File(sourceBucket, file, region, accessKeyId, secretAccessKey, signatureVersion)
             }
