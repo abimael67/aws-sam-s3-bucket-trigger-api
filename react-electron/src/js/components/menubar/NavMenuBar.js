@@ -7,13 +7,13 @@ var electron = window.require("electron")
 const WithRouterNavMenuBar = props =>{
     const SYNCING = 'Sync'
     const SYNCING_ROUTE = '/app'
-    const JOB_ARCHIVING = 'Store'
+    const JOB_ARCHIVING = 'Archive'
     const JOB_ARCHIVING_ROUTE = '/jobarchiving'
     const FILE_STITCHING = 'Stitch' 
     const FILE_STITCHING_ROUTE = '/filestitching'
-    const MPEG_CONVERSION = 'MPEG Conversion'
+    const MPEG_CONVERSION = 'Convert'
     const MPEG_CONVERSION_ROUTE = '/mpegconversion'
-    const LOCAL_DOWNLOAD = 'Local Download'
+    const LOCAL_DOWNLOAD = 'Download'
     const LOCAL_DOWNLOAD_ROUTE = '/localdownload'
     const GLIM = 'Clip'
     const GLIM_ROUTE = '/embeddedweb'
@@ -23,8 +23,8 @@ const WithRouterNavMenuBar = props =>{
     dropdownRouteMappings[JOB_ARCHIVING] = JOB_ARCHIVING_ROUTE
     dropdownRouteMappings[FILE_STITCHING] = FILE_STITCHING_ROUTE
     dropdownRouteMappings[MPEG_CONVERSION] = MPEG_CONVERSION_ROUTE
-    dropdownRouteMappings[LOCAL_DOWNLOAD] = LOCAL_DOWNLOAD_ROUTE
     dropdownRouteMappings[GLIM] = GLIM_ROUTE
+    dropdownRouteMappings[LOCAL_DOWNLOAD] = LOCAL_DOWNLOAD_ROUTE
   
     const handleClick = (route) => {
         let window = electron.remote.getCurrentWindow()

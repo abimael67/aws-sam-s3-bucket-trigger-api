@@ -48,7 +48,7 @@ class ConnectedFileStitching extends Component {
         >
           <Form.Row style={{height:'100%'}}>
             <Col xs={6} style={{paddingBottom:'20px', display:'flex', flexDirection:'column'}}>
-              <Form.Row style={{maxHeight:'35px'}}>{ SectionTitle('File Stitching' + this.componentVariantLabel ) }</Form.Row>
+              <Form.Row style={{maxHeight:'35px'}}>{ SectionTitle('Media Stitching' + this.componentVariantLabel ) }</Form.Row>
               <Form.Row style={{marginTop:'15px'}}>{ this.SourceFields() }</Form.Row>
               <Form.Row style={{marginTop:'15px', maxHeight:'150px'}}>{ this.DestinationFields() }</Form.Row>
               <Form.Row style={{maxHeight:'20px'}}>{ this.FormErrors() }</Form.Row>

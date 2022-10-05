@@ -26,7 +26,7 @@ class ConnectedMpegConversion extends Component {
         >
           <Form.Row style={{height:'100%'}}>
             <Col xs={6} style={{paddingBottom:'20px', display:'flex', flexDirection:'column'}}>
-              <Form.Row style={{maxHeight:'35px'}}>{ SectionTitle('MPEG1 Conversion' ) }</Form.Row>
+              <Form.Row style={{maxHeight:'35px'}}>{ SectionTitle('MPEG4 to MPEG1 Conversion' ) }</Form.Row>
               <Form.Row style={{marginTop:'15px'}}>{ this.SourceFields() }</Form.Row>
               <Form.Row style={{maxHeight:'20px'}}>{ this.FormErrors() }</Form.Row>
               <Form.Row style={{maxHeight:'35px'}}>{ this.MpegConversionButton() }</Form.Row>
