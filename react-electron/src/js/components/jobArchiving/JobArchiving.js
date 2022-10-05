@@ -7,6 +7,7 @@ import SectionTitle from './../../utils/sectionTitle'
 import ArchivedJobsList from '../archivedJobsList/ArchivedJobsList'
 import './JobArchiving.scss'
 import JOB_ARCHIVING_CONSTANTS from './../../constants/job-archiving'
+import InProgressJobsList from '../archivedJobsList/InProgressJobsList';
 
 class ConnectedJobArchiving extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class ConnectedJobArchiving extends Component {
           <Col xs={6} style={{paddingBottom:'20px', display:'flex', flexDirection:'column'}}>
             <Form.Row style={{maxHeight:'35px'}}>{ SectionTitle('Store (alpha version)' ) }</Form.Row>
             <Form.Row style={{marginTop:'20px'}}>{ this.SourceFields() }</Form.Row>
-            {/* <Form.Row style={{marginTop:'15px'}}>{ this.DestinationFields() }</Form.Row> */}
+            <Form.Row style={{marginTop:'15px'}}> <InProgressJobsList /></Form.Row>
             <Form.Row style={{maxHeight:'20px'}}>{ this.FormErrors() }</Form.Row>
             <Form.Row style={{maxHeight:'35px'}}>{ this.ArchiveJobButton() }</Form.Row>
           </Col>

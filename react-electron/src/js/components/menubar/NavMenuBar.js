@@ -31,7 +31,6 @@ const WithRouterNavMenuBar = props =>{
         window.setBrowserView(null)
         props.history.push(route)
     }
-    console.log("PROPS: ", props)
     return (
         <Row className='subtitle-bar'>
             {Object.entries(dropdownRouteMappings).map(r => 

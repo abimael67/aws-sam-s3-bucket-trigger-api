@@ -12,7 +12,7 @@ import { ARCHIVING_JOB,  SUCCESS, ERROR } from './../../../constants/job_archivi
 import JOB_ARCHIVING_CONSTANTS from '../../../constants/job-archiving'
 
 const { SOURCE_BUCKETS, sourceToTargetBucketMappings, getDestinationParentDirectory } = JOB_ARCHIVING_CONSTANTS
-function formatBytes(bytes, decimals = 2) {
+export function formatBytes(bytes, decimals = 2) {
   if (!+bytes) return '0 Bytes'
 
   const k = 1024
@@ -60,6 +60,7 @@ class ConnectedArchivedJob extends Component {
    
    let currentFileName = currentFile && currentFile.Key.split('/').length > 0 ? currentFile.Key.split('/')[1] : "?"
    let currentFileSize = currentFile ? formatBytes(currentFile.Size) : "?"
+   console.log('AJ: ', this.props)
     return (
       <ListGroup.Item
         style={{borderTopWidth:'1px',
@@ -94,11 +95,11 @@ class ConnectedArchivedJob extends Component {
         </Row>
         <Row className="TimeSubmitted">
           <Col style={{maxWidth:'140px', padding:'0px'}}><u>Current file:</u></Col>
-          <Col style={{paddingLeft: '10px'}}>{currentFileName}</Col>
+          <Col style={{paddingLeft: '10px'}}>{this.props.archivingProgress.filename}</Col>
         </Row>
         <Row className="TimeSubmitted">
           <Col style={{maxWidth:'140px', padding:'0px'}}><u>Current file size:</u></Col>
-          <Col style={{paddingLeft: '10px'}}>{currentFileSize}</Col>
+          <Col style={{paddingLeft: '10px'}}>{this.props.archivingProgress.fileSize}</Col>
         </Row>
         <Row className="SubmissionResponse">
           <Col style={{maxWidth:'140px', padding:'0px'}}><u>Submission Response:</u></Col>

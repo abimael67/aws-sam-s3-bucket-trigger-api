@@ -40,7 +40,7 @@ const getInitialState = () => ({
   theme: getPreferredTheme(),
   lastTimeOfActivity: new Date(),
   archivedJobs: [],
-  archivingProgress: 0,
+  archivingProgress: {},
   stitchedFiles: [],
   mpegConversionVeriSuiteJobs: []
 });
@@ -263,7 +263,7 @@ function JobArchivingFinishedReducer(state, action) {
 }
 
 function JobArchivingProgressReducer(state, action) {
-  console.log('Red: ', action)
+  
   return Object.assign(
     {},
     state,

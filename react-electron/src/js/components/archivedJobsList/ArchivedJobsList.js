@@ -4,8 +4,9 @@ import { connect } from 'react-redux'
 import './ArchivedJobsList.scss'
 import ArchivedJob from './ArchivedJob/ArchivedJob'
 import { Scrollbars } from 'react-custom-scrollbars'
-
-function mapStateToProps(state){
+import getStatus from './ArchivedJob/ArchivedJob.logic/getStatus'
+import { SUCCESS, ERROR, ARCHIVING_JOB } from '../../constants/job_archiving_statuses'
+function mapStateToProps(state) {
   return {
     ...state,
     archivedJobs: state.archivedJobs
@@ -13,95 +14,85 @@ function mapStateToProps(state){
 }
 
 class ConnectedArchivedJobsList extends Component {
- componentDidMount(){
-   const { dispatch } = this.props
-   this.dispatch = dispatch
- }
+  componentDidMount() {
+    const { dispatch } = this.props
+    this.dispatch = dispatch
+  }
 
- constructor(props){
-   super(props)
-   this.archivedJobs = props.archivedJobs
-   //^^//console.log("props.archivedJobs:")
-   //^^//console.log(props.archivedJobs)
-   this.render = this.render.bind(this)
-   this.placeholder = this.placeholder.bind(this)
- }
+  constructor(props) {
+    super(props)
+    this.archivedJobs = props.archivedJobs
+    //^^//console.log("props.archivedJobs:")
+    //^^//console.log(props.archivedJobs)
+    this.render = this.render.bind(this)
+    this.placeholder = this.placeholder.bind(this)
+  }
 
- placeholder(archivedJobs) {
-   //^^//console.log("testing inside ArchivedJobsList.js...")
+  placeholder(archivedJobs) {
+    //^^//console.log("testing inside ArchivedJobsList.js...")
 
-   //^^//console.log("archivedJobs:")
-   //^^//console.log(archivedJobs)
+    //^^//console.log("archivedJobs:")
+    //^^//console.log(archivedJobs)
 
-   if(!Array.isArray(archivedJobs) || archivedJobs.length < 1) {
-    let paddingSides = '10px' 
-    let paddingTop = paddingSides
+    if (!Array.isArray(archivedJobs) || archivedJobs.length < 1) {
+      let paddingSides = '10px'
+      let paddingTop = paddingSides
 
-    return (
-      <div
-      style={{
-        borderStyle:'dashed',
-        borderWidth:'1px',
-        borderColor:'darkgrey',
-        borderRadius:'.25rem',
-        backgroundColor:'none',
-        height:'110px',
-        paddingLeft:paddingSides,
-        paddingRight:paddingSides,
-        paddingTop:paddingTop,
-        width:'100%',
-        color:'darkgrey',
-        fontSize:'14px'
-      }}
-      >
-        Archive a Job by Clicking the 'Archive Job' Button
-      </div>
-    )
-   }
-   else {
-     return null
-   }
- }
+      return (
+        <div
+          style={{
+            borderStyle: 'dashed',
+            borderWidth: '1px',
+            borderColor: 'darkgrey',
+            borderRadius: '.25rem',
+            backgroundColor: 'none',
+            height: '110px',
+            paddingLeft: paddingSides,
+            paddingRight: paddingSides,
+            paddingTop: paddingTop,
+            width: '100%',
+            color: 'darkgrey',
+            fontSize: '14px'
+          }}
+        >
+          Archive a Job by Clicking the 'Archive Job' Button
+        </div>
+      )
+    }
+    else {
+      return null
+    }
+  }
 
- render() {
-   //^^//console.log("rendering archived jobs list group...")
+  render() {
+    //^^//console.log("rendering archived jobs list group...")
 
-   console.log('UK: ', this.props)
-   let jobOrdinalNumber = 0
-
-   return (
-     <Fragment>
-       <Form.Label className="textFieldLabel">Archived Jobs</Form.Label>
-       <Form.Label className="textFieldLabel">(Note: archiving functionality not yet fully implemented. Files will be copied into the target bucket/directory, and the source file will be deleted, but any now-empty folders are not yet deleted. Errors not fully displayed on this UI yet)</Form.Label>
-       <Scrollbars className="scrollBars">
-         <ListGroup className="submittedJobsListGroup">
-          { this.placeholder(this.props.archivedJobs) }
-          {
-            this.props.archivedJobs.map(
-              aj => {
-                jobOrdinalNumber++;
-              
-                //return null
-                return ( <ArchivedJob key={aj.id} ArchivedJobObject={aj} jobOrdinalNumber={jobOrdinalNumber} />)
+    console.log('UK: ', this.props)
+    let jobOrdinalNumber = 0
+      return (
+        <Fragment>
+          <Form.Label className="textFieldLabel">Completed Jobs</Form.Label>
+          <Form.Label className="textFieldLabel">(Note: archiving functionality not yet fully implemented. Files will be copied into the target bucket/directory, and the source file will be deleted, but any now-empty folders are not yet deleted. Errors not fully displayed on this UI yet)</Form.Label>
+          <Scrollbars className="scrollBars">
+            <ListGroup className="submittedJobsListGroup">
+              {this.placeholder(this.props.archivedJobs)}
+              {
+                this.props.archivedJobs.map(
+                  aj => {
+                    jobOrdinalNumber++;
+                    if(getStatus(aj.jobArchiver.jobArchivingStatus) === SUCCESS ||
+                    getStatus(aj.jobArchiver.jobArchivingStatus) === ERROR)
+                    return (<ArchivedJob key={aj.id} ArchivedJobObject={aj} jobOrdinalNumber={jobOrdinalNumber} />)
+                  }
+                )
               }
-            )
-          }
-          {
-            this.props.archivingProgress > 0 &&
-          
-          <ListGroup.Item>
-            <ProgressBar animated 
-                        now={this.props.archivingProgress}
-                        label={`${this.props.archivingProgress.toFixed(2)}%`}
-                        variant={this.props.archivingProgress === 100 ? 'success' : 'info'}
-                        />
-          </ListGroup.Item>
- }
-         </ListGroup>
-       </Scrollbars>
-     </Fragment>
-   )
- }
+
+            </ListGroup>
+          </Scrollbars>
+        </Fragment>
+      )
+     
+  }
 }
 
 const ArchivedJobsList = connect(mapStateToProps)(ConnectedArchivedJobsList)

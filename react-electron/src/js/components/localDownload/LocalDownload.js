@@ -15,7 +15,6 @@ class ConnectedLocalDownload extends Component {
 
   
   componentDidMount(){
-    console.log('teststst')
     getS3FileList('vxtarc', )
   }
 

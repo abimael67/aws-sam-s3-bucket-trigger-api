@@ -2,15 +2,8 @@ import { SUCCESS, ERROR, ARCHIVING_JOB } from './../../../../constants/job_archi
 import { COLOR_SUCCESS, COLOR_ERROR } from './../../../../constants/list_item_colors'
 
 function selectBackgroundColor(){
-  let status = this.ArchivedJobObject.jobArchiver.jobArchivingStatus
-  if(status.includes('Success')){
-    let temp = status.split(' ')
-    if(temp[1] === temp[3])
-      status = SUCCESS
-    else
-      status = ARCHIVING_JOB
-  }
-  //status = status.includes('Success') ? SUCCESS : status
+  let status = this.getStatus(this.ArchivedJobObject.jobArchiver.jobArchivingStatus)
+ 
   switch (status) {
     case SUCCESS:
       if(this.props.jobOrdinalNumber%2 === 1){

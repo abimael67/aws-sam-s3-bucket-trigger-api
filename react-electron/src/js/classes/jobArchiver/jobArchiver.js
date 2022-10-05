@@ -7,6 +7,7 @@ import File from './../../utils/file'
 import defined from './../../utils/defined'
 import JOB_ARCHIVING_CONSTANTS from './../../constants/job-archiving'
 import ENVS from './../../constants/environments'
+import { formatBytes } from '../../components/archivedJobsList/ArchivedJob/ArchivedJob'
 
 const aws = require('aws-sdk')
 const ASYNC = require('async')
@@ -19,7 +20,6 @@ try {
 catch (error) {
   Logging.logError("Error trying to initialize jobArchiver's config. Error:", error)
 }
-console.log('CONFIGG: ', config)
 
 function getParentFolder(fileKey) {
   if (fileKey[fileKey.length - 1] === "/") {
@@ -34,8 +34,6 @@ function getParentFolder(fileKey) {
 function calculateTransferProgress(allFiles, currentFile, currentProgress){
   const totalFiles = allFiles.length;
   const totalSize = allFiles.reduce((acc, curr)=> acc + curr.Size, 0)
-  console.log("TRL: ", totalFiles, totalSize, " ",(currentFile.Size / totalSize * 100))
-  console.log('Progress: ',  currentProgress + (currentFile.Size / totalSize * 100))
   return currentProgress + (currentFile.Size / totalSize * 100)
 }
 
@@ -180,21 +178,18 @@ class JobArchiver {
   async getCorrespondingRangeFolder() {
     const destinationBucket = JOB_ARCHIVING_CONSTANTS.DESTINATION_BUCKETS.archive_originals
     const { range, folders } = await this.getS3FileList(destinationBucket, 'From Videographers/')
-    console.log('RangeFolders: ', range, folders)
     let jobNumber = this.externalJobNumber
     for (const folder of range) {
       const from = folder.substring(0, folder.indexOf('-'))
       const to = folder.substring(folder.indexOf('-') + 1, folder.length - 1)
       if (from && to && !isNaN(from) && !isNaN(to)) {
         if (jobNumber >= Number(from) && jobNumber <= Number(to)) {
-          console.log('Folder acquired: ',  folder.substring(0, folder.length - 1))
           this.rangeFolder = folder.substring(0, folder.length - 1)
           return {folder: this.rangeFolder, create: false}
         }
       }
     }
     let folder = this.generateRangeFolderName(jobNumber)
-    console.log('Generated2: ', folder)
     this.rangeFolder = folder
     return {folder, create: true}
   }
@@ -237,8 +232,6 @@ class JobArchiver {
       let files = this.removeNonFiles(responseData.Contents)
       let folders = this.getFolders(responseData.Contents)
       let range = this.getFoldersOnly(responseStructure.CommonPrefixes, parentFolder)
-      console.log('Folders: ', folders)
-      console.log('Range: ', range)
       return { files, folders, range }
     }
     catch (error) {
@@ -277,7 +270,8 @@ class JobArchiver {
       // }
       if (files.length && files.length > 0) {
         let iterator = 0
-        let progress = 0
+        let percentage = 0
+       
         store.dispatch(action(JOB_ARCHIVING_FINISHED, ARCHIVING_JOB))
         ASYNC.each(files, (file, cb) => {
           let params = {
@@ -286,10 +280,10 @@ class JobArchiver {
             //Key: `${year}/${month}/${file.Key}`
             Key: `${JOB_ARCHIVING_CONSTANTS.getDestinationParentDirectory(sourceBucket, year, month, rangeName)}${file.Key}`
           }
+         
+         
           this.currentFile = file
-          console.log('FILE: ', file)
           //get size prop from file
-          console.log('PARAMS: ', params)
           store.dispatch(action(JOB_ARCHIVING_FINISHED, ARCHIVING_JOB))
           s3.copyObject(params, (copyErr, copyData) => {
             if (copyErr) {
@@ -301,7 +295,12 @@ class JobArchiver {
               cb()
               file.copyData = copyData
               //set status
-              progress = calculateTransferProgress(files, file, progress)
+              percentage = calculateTransferProgress(files, file, percentage)
+              let progress = {
+                percentage : percentage,
+                filename: file.Key.split('/')[1],
+                fileSize: formatBytes(file.Size)
+              }
               this.jobArchivingStatus = `Success ${iterator} of ${files.length}`
               store.dispatch(action(JOB_ARCHIVING_PROGRESS, progress))
               store.dispatch(action(JOB_ARCHIVING_FINISHED, this.jobArchivingStatus))
