@@ -72,7 +72,7 @@ class ConnectedArchivedJobsList extends Component {
       return (
         <Fragment>
           <Form.Label className="textFieldLabel">Completed Jobs</Form.Label>
-          <Form.Label className="textFieldLabel">(Note: archiving functionality not yet fully implemented. Files will be copied into the target bucket/directory, and the source file will be deleted, but any now-empty folders are not yet deleted. Errors not fully displayed on this UI yet)</Form.Label>
+          <Form.Label className="textFieldLabel"></Form.Label>
           <Scrollbars className="scrollBars">
             <ListGroup className="submittedJobsListGroup">
               {this.placeholder(this.props.archivedJobs)}

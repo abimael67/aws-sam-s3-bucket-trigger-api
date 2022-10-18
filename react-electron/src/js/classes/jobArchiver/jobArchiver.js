@@ -304,7 +304,7 @@ class JobArchiver {
               this.jobArchivingStatus = `Success ${iterator} of ${files.length}`
               store.dispatch(action(JOB_ARCHIVING_PROGRESS, progress))
               store.dispatch(action(JOB_ARCHIVING_FINISHED, this.jobArchivingStatus))
-              //  deleteS3File(sourceBucket, file, region, accessKeyId, secretAccessKey, signatureVersion)
+              deleteS3File(sourceBucket, file, region, accessKeyId, secretAccessKey, signatureVersion)
             }
           })
         })
