@@ -2,8 +2,9 @@ import React from 'react'
 import { Button, Row, Col } from 'react-bootstrap'
 import { withRouter } from 'react-router-dom'
 import './NavMenuBar.scss'
-var electron = window.require("electron")
 
+const { BrowserWindow } = window.require('@electron/remote')
+var remote = BrowserWindow;
 const WithRouterNavMenuBar = props =>{
     const SYNCING = 'Sync'
     const SYNCING_ROUTE = '/app'
@@ -27,7 +28,7 @@ const WithRouterNavMenuBar = props =>{
     dropdownRouteMappings[LOCAL_DOWNLOAD] = LOCAL_DOWNLOAD_ROUTE
   
     const handleClick = (route) => {
-        let window = electron.remote.getCurrentWindow()
+        let window = remote.getFocusedWindow()
         window.setBrowserView(null)
         props.history.push(route)
     }

@@ -4,8 +4,8 @@ import { action } from './../../../utils/action'
 import defined from './../../../utils/defined'
 import Logging from './../../../utils/logging'
 
-var electron = window.require("electron")
-var remote = electron.remote
+const { BrowserWindow } = window.require('@electron/remote')
+var remote = BrowserWindow;
 var dialog = remote.dialog
 var store = window.store
 

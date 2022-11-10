@@ -6,8 +6,8 @@ import firstEqualsOneOfTheOthers from './first-equals-one-of-the-others'
 //import STRING_CONSTANTS from './../constants/string'
 import LOG from './../constants/log'
 import DATA from './../constants/data'
-const fs = window.require('fs')
-const uuidv4 = window.require("uuid/v4")
+const fs = require('fs')
+const uuidv4 = require("uuid/v4")
 
 /*
 let msgTypes = {

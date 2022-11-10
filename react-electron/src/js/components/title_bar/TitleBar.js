@@ -2,10 +2,9 @@ import React, { Component } from "react"
 import { withRouter } from 'react-router-dom'
 import './TitleBar.scss'
 import { Button, Row, Col } from 'react-bootstrap'
-var electron = window.require("electron")
-var remote = electron.remote
+const { BrowserWindow } = window.require('@electron/remote')
 
-const currentWindow = remote.getCurrentWindow()
+const currentWindow =  BrowserWindow.fromId(1)
 
 class WithRouterTitleBar extends Component {
   constructor(props) {

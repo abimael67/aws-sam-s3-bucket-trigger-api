@@ -1,13 +1,10 @@
-const CheckForUpdates = require('./checkForUpdates');
-const { dialog, ipcMain } = require('electron');
-const { autoUpdater } = require('electron-updater');
-
 const { initSplashScreen, OfficeTemplate } = require('electron-splashscreen');
 const electron = require("electron");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const isDev = require("electron-is-dev");
+require('@electron/remote/main').initialize()
 let mainWindow;
 
 let allowDevTools = false;
@@ -39,10 +36,11 @@ async function createWindow() {
       //devTools: allowDevTools
       devTools: true,
       additionalArguments: [app.getPath('userData')],
-      webviewTag: true
+      webviewTag: true,
+      contextIsolation: false
     }
   });
-
+  require("@electron/remote/main").enable(mainWindow.webContents)
   if(!allowDevTools) {
     //mainWindow.webContents.on("devtools-opened", () => { mainWindow.webContents.closeDevTools(); });
   }else{

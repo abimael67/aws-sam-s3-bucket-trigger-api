@@ -1,10 +1,13 @@
 import JOB_ARCHIVING_CONSTANTS from '../../constants/job-archiving'
 import Logging from '../../utils/logging'
 import File from '../../utils/file'
-const aws = require('aws-sdk')
-let config
+
+const aws = window.require('aws-sdk')
+let config = {}
 try {
-  config = JSON.parse(File.getContent(JOB_ARCHIVING_CONSTANTS.CONFIG_FILE))
+  let t = File.getContent(JOB_ARCHIVING_CONSTANTS.CONFIG_FILE)
+  config = JSON.parse(t)
+ 
 }
 catch (error) {
   Logging.logError("Error trying to initialize jobArchiver's config. Error:", error)
