@@ -1,8 +1,8 @@
 {
   "name": "VeriSuite",
-  "version": "1.9.1",
+  "version": "2.0.1",
   "description": "Desktop application to send out jobs for further processing.",
-  "author": "Max Albrecht",
+  "author": "Veritext",
   "build": {
     "appId": "com.albrechtsoft.thesyncer",
     "directories": {
@@ -13,7 +13,7 @@
       "icon": "build/icon.ico",
       "certificateFile": "private/albrechtsoft.pfx",
       "verifyUpdateCodeSignature": false,
-      "publisherName": "albrechtsoft",
+      "publisherName": "veritext",
       "publish": [
         "github"
       ]
