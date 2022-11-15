@@ -30,8 +30,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "cross-env": "^6.0.3",
-    "electron": "^21.2.0",
-    "electron-builder": "^23.6.0",
+    
     "electron-is-dev": "^2.0.0",
     "electron-log": "^4.3.3",
     "electron-progressbar": "^1.2.0",
@@ -98,6 +97,8 @@
     "@storybook/preset-create-react-app": "^1.5.1",
     "@storybook/react": "^5.3.19",
     "concurrently": "^5.3.0",
+    "electron": "^21.2.0",
+    "electron-builder": "^23.6.0",
     "html-loader": "^0.5.5",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
