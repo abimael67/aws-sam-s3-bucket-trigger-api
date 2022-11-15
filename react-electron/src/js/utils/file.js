@@ -3,7 +3,7 @@ import defined from './defined'
 import Logging from './logging'
 import { convertUnits } from './conversionFunctions'
 
-const fs = window.require('fs')
+const fs = require('fs')
 const b = "b"
 const B = "B"
 const KB = "KB"
