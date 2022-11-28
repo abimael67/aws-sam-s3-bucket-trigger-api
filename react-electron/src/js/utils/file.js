@@ -2,8 +2,12 @@
 import defined from './defined'
 import Logging from './logging'
 import { convertUnits } from './conversionFunctions'
-
-const fs = require('fs')
+let fs = null
+if (typeof window !== "undefined")
+  fs = window.require('fs')
+else
+  fs = require('fs')
+  
 const b = "b"
 const B = "B"
 const KB = "KB"
@@ -18,7 +22,7 @@ const Tb = "Tb"
 
 function getByteUnitConversions() {
   const byteUnitConversions = {}
-  let   ordinalNumber = 0
+  let ordinalNumber = 0
 
   byteUnitConversions[b] = {
     ordinalNumber: ordinalNumber++,
@@ -56,8 +60,8 @@ function getByteUnitConversions() {
 
 function getBitUnitConversions() {
   const bitUnitConversions = {}
-  let   ordinalNumber = 0
-  
+  let ordinalNumber = 0
+
   bitUnitConversions[b] = {
     ordinalNumber: ordinalNumber++,
     nextUnit: Kb,
@@ -111,21 +115,21 @@ function convertUnits(amount, sourceUnit, targetUnit, unitConversions) {
 */
 
 function convertDataUnits(amount, sourceUnit, targetUnit) {
-  if(
+  if (
     (sourceUnit[sourceUnit.length - 1] === B || sourceUnit === b)
     && (targetUnit[targetUnit.length - 1] === B || targetUnit === b)
   ) {
     return convertUnits(amount, sourceUnit, targetUnit, getByteUnitConversions())
   }
-  else if(sourceUnit[sourceUnit.length - 1] === b && targetUnit[targetUnit.length - 1] === b){
+  else if (sourceUnit[sourceUnit.length - 1] === b && targetUnit[targetUnit.length - 1] === b) {
     return convertUnits(amount, sourceUnit, targetUnit, getBitUnitConversions())
   }
-  else if(sourceUnit[sourceUnit.length - 1] === B && targetUnit[targetUnit.length - 1] === b){
+  else if (sourceUnit[sourceUnit.length - 1] === B && targetUnit[targetUnit.length - 1] === b) {
     let amountInBits = convertUnits(amount, sourceUnit, b, getByteUnitConversions())
 
     return convertUnits(amountInBits, b, targetUnit, getBitUnitConversions())
   }
-  else if(sourceUnit[sourceUnit.length - 1] === b && targetUnit[targetUnit.length - 1] === B){
+  else if (sourceUnit[sourceUnit.length - 1] === b && targetUnit[targetUnit.length - 1] === B) {
     let amountInBits = convertUnits(amount, sourceUnit, b, getBitUnitConversions())
 
     return convertUnits(amountInBits, b, targetUnit, getByteUnitConversions())
@@ -182,7 +186,7 @@ const UNITS = {
 }
 
 function deleteFileIfItExists(filePath) {
-  if(fs.existsSync(filePath)) {
+  if (fs.existsSync(filePath)) {
     fs.unlinkSync(filePath)
   }
   else {
@@ -195,7 +199,7 @@ function removeDir(path) {
     const files = fs.readdirSync(path)
 
     if (files.length > 0) {
-      files.forEach(function(filename) {
+      files.forEach(function (filename) {
         if (fs.statSync(path + "/" + filename).isDirectory()) {
           removeDir(path + "/" + filename)
         } else {
@@ -212,21 +216,21 @@ function removeDir(path) {
 }
 
 function removeNameFromPath(filePath) {
-    return `${filePath.substr(0, filePath.lastIndexOf('\\'))}\\`
-  }
+  return `${filePath.substr(0, filePath.lastIndexOf('\\'))}\\`
+}
 
 function makeDirIfItDoesNotExist(directory) {
   //var fs = window.require('fs');
-  try{
-    if (defined(directory) && !fs.existsSync(directory)){
+  try {
+    if (defined(directory) && !fs.existsSync(directory)) {
       fs.mkdirSync(directory, { recursive: true }, (err) => {
-        if(err) {
+        if (err) {
           throw err
         }
       })
     }
   }
-  catch(error) { 
+  catch (error) {
     //alert(`Failed to create directory "${directory}"`)
     console.log(`ERROR when attempting to create directory "${directory}". Error is as follows:`)
     console.log(error)
@@ -234,10 +238,11 @@ function makeDirIfItDoesNotExist(directory) {
 }
 function saveTo(fileContent, filePath) {
   //var fs = window.require('fs');
-  try { 
-    fs.writeFileSync(filePath, fileContent, 'utf-8'); 
+  try {
+    fs.writeFileSync(filePath, fileContent, 'utf-8');
   }
-  catch(e) { alert('Failed to save to file!');
+  catch (e) {
+    alert('Failed to save to file!');
     return console.log(e);
   }
 }
@@ -246,11 +251,11 @@ function makeFileIfItDoesNotExist(filePath, defaultContent = '') {
   try {
     makeDirIfItDoesNotExist(removeNameFromPath(filePath))
 
-    if(!fs.existsSync(filePath)) {
+    if (!fs.existsSync(filePath)) {
       saveTo(defaultContent, filePath)
     }
   }
-  catch(error) {
+  catch (error) {
     console.log("error in File.makeFileIfItDoesNotExist()")
   }
 }
@@ -263,12 +268,12 @@ function makeOrOverwriteFile(filePath, fileContent = '') {
 
 
 const File = {
-  UNITS: {...UNITS, testing: "testing"} ,
+  UNITS: { ...UNITS, testing: "testing" },
   getContent(filePath) {
     let fileContent = ""
     try {
       //let fs = window.require('fs')
-      if(fs.existsSync(filePath)){
+      if (fs.existsSync(filePath)) {
 
         fileContent = fs.readFileSync(filePath, 'utf8')
 
@@ -279,7 +284,7 @@ const File = {
         //return null
       }
     }
-    catch(e){
+    catch (e) {
       Logging.error(e, `Error trying to get File Content`)
       //^^//console.log(`Error trying to get File Content. Error:`)
       //^^//console.log(e)
@@ -289,26 +294,26 @@ const File = {
   },
   getSizeInBytes(filePath) {
     try {
-    let stats = fs.statSync(filePath)
-    let fileSizeInBytes = stats["size"]
+      let stats = fs.statSync(filePath)
+      let fileSizeInBytes = stats["size"]
 
-    return fileSizeInBytes
+      return fileSizeInBytes
     }
-    catch(err) {
+    catch (err) {
       //^^//console.log("Error getting file size. Error: " + err);
       alert("Error getting file size. Please check that the file exists.");
     }
   },
   getSize(filePath) {
     //let fs = window.require("fs"); //Load the filesystem module
-    try{
-    let stats = fs.statSync(filePath)
-    let fileSizeInBytes = stats["size"]
-    let fileSizeInKilobytes = fileSizeInBytes / 1000.0
+    try {
+      let stats = fs.statSync(filePath)
+      let fileSizeInBytes = stats["size"]
+      let fileSizeInKilobytes = fileSizeInBytes / 1000.0
 
-    return fileSizeInKilobytes + " KB";
+      return fileSizeInKilobytes + " KB";
     }
-    catch(err) {
+    catch (err) {
       //^^//console.log("Error getting file size. Error: " + err);
       alert("Error getting file size. Please check that the file exists.");
     }
@@ -336,7 +341,7 @@ const File = {
     */
 
     let result = false
-    if( fs.existsSync(filePath) && fs.statSync(filePath).size > UNITS.convert(sizeLimit, unit, UNITS.B) ) {
+    if (fs.existsSync(filePath) && fs.statSync(filePath).size > UNITS.convert(sizeLimit, unit, UNITS.B)) {
       result = true
     }
 
@@ -354,14 +359,14 @@ const File = {
   async appendTo(fileContent, filePathOrStream, closeStream = false) {
     let { filePath, stream } = filePathOrStream
 
-    if(!defined(stream)) {
+    if (!defined(stream)) {
       stream = fs.createWriteStream(filePath, { flags: 'a' })
       closeStream = true
     }
 
     let writeResult = await stream.write(fileContent)
 
-    if(closeStream) { await stream.end() }
+    if (closeStream) { await stream.end() }
 
     return writeResult
   },
@@ -405,8 +410,8 @@ const File = {
     console.log(hexSync)
 
     let hex
-    
-    await fs.readFile(filePath, function(err, buf) {
+
+    await fs.readFile(filePath, function (err, buf) {
       let hex = md5(buf)
       console.log("MD5 ASYNC HEX:")
       console.log(hex);

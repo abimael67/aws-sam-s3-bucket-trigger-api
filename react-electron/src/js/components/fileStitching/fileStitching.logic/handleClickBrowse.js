@@ -1,10 +1,8 @@
 import { checkIfDirectoryExists } from '../../../utils/directoryFunctions'
 import { DISALLOW_OPEN_DIALOG, ALLOW_OPEN_DIALOG } from './../../../constants/action-types'
 import { action } from './../../../utils/action'
+const  dialog  = window.require('@electron/remote').dialog
 
-const { BrowserWindow } = window.require('@electron/remote')
-var remote = BrowserWindow;
-var dialog = remote.dialog;
 var store = window.store;
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -71,11 +69,11 @@ async function handleClickBrowse() {
   //^^//console.log("window.store.getState():")
   //^^//console.log(window.store.getState())
   let defaultPath = await setDefaultPath(this.state.jobNumber);
-  
+ 
 
   if(allowOpenDialog()){
     store.dispatch(action(DISALLOW_OPEN_DIALOG));
-
+    console.log("PEPEPE: ", dialog)
     try{
       var browseButtonResponse = 
         await dialog.showOpenDialog(
