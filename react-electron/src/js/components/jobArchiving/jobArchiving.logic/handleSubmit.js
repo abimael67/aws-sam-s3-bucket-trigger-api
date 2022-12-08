@@ -46,7 +46,7 @@ async function handleSubmit(event) {
           jobArchiver: jobArchiver,
           date: date
         })
-
+        jobArchiver.archiveJob()
         this.setState((state, props) => ({
           ...getConstructorState(),
           errors: state.errors

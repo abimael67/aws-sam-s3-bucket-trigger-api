@@ -1,4 +1,4 @@
-import {mapStateToProps, logicConstructor } from './ArchivedJob.logic/ArchivedJob.logic'
+import { mapStateToProps, logicConstructor } from './ArchivedJob.logic/ArchivedJob.logic'
 
 import React, { Component } from 'react'
 import { ListGroup, Row, Col } from 'react-bootstrap'
@@ -8,10 +8,10 @@ import './ArchivedJob.scss'
 import fieldBind from './ArchivedJob.fields/ArchivedJob.fields'
 
 import { ODD, EVEN, FAILURE } from './../../../constants/cssClassNames'
-import { ARCHIVING_JOB,  SUCCESS, ERROR } from './../../../constants/job_archiving_statuses'
+import { ARCHIVING_JOB, SUCCESS, ERROR } from './../../../constants/job_archiving_statuses'
 import JOB_ARCHIVING_CONSTANTS from '../../../constants/job-archiving'
 
-const { SOURCE_BUCKETS, sourceToTargetBucketMappings, getDestinationParentDirectory } = JOB_ARCHIVING_CONSTANTS
+const { sourceToTargetBucketMappings, getDestinationParentDirectory } = JOB_ARCHIVING_CONSTANTS
 export function formatBytes(bytes, decimals = 2) {
   if (!+bytes) return '0 Bytes'
 
@@ -24,9 +24,9 @@ export function formatBytes(bytes, decimals = 2) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
 }
 class ConnectedArchivedJob extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
-    
+
     logicConstructor.bind(this)(props)
     fieldBind.bind(this)()
   }
@@ -34,77 +34,79 @@ class ConnectedArchivedJob extends Component {
   render() {
     let oddOrEven = ODD
 
-    if(this.props.jobOrdinalNumber%2 === 0){
+    if (this.props.jobOrdinalNumber % 2 === 0) {
       oddOrEven = EVEN
     }
 
     let successOrFailure = ''
 
-    if(this.ArchivedJobObject.jobArchiver.jobArchivingStatus === ARCHIVING_JOB) {
+    if (this.ArchivedJobObject.jobArchiver.jobArchivingStatus === ARCHIVING_JOB) {
       successOrFailure = ''
     }
-    else if(this.ArchivedJobObject.jobArchiver.jobArchivingStatus === SUCCESS){
+    else if (this.ArchivedJobObject.jobArchiver.jobArchivingStatus === SUCCESS) {
       successOrFailure = SUCCESS
     }
-    else if(this.ArchivedJobObject.jobArchiver.jobArchivingStatus === ERROR){
+    else if (this.ArchivedJobObject.jobArchiver.jobArchivingStatus === ERROR) {
       successOrFailure = FAILURE
     }
 
     let jobClasses = ''
-    if(successOrFailure !== ''){
+    if (successOrFailure !== '') {
       jobClasses = successOrFailure + '_' + oddOrEven
     }
 
     let { jobArchiver } = this.ArchivedJobObject
-    let {currentFile} = jobArchiver
-   
-   let currentFileName = currentFile && currentFile.Key.split('/').length > 0 ? currentFile.Key.split('/')[1] : "?"
-   let currentFileSize = currentFile ? formatBytes(currentFile.Size) : "?"
-   console.log('AJ: ', this.props)
+    let { currentFile } = jobArchiver
+
     return (
       <ListGroup.Item
-        style={{borderTopWidth:'1px',
-          backgroundColor: this.selectBackgroundColor()}}
+        style={{
+          borderTopWidth: '1px',
+          backgroundColor: this.selectBackgroundColor()
+        }}
         className={
-          'listItemGroupItem' 
+          'listItemGroupItem'
           + ' ' + jobClasses
         }
 
         key={this.ArchivedJobObject.id}
       >
         <Row className="JobNumber">
-          <Col style={{maxWidth:'140px', padding:'0px'}}><u>Job Number:</u></Col>
-          <Col style={{padingLeft:'10px'}}>{this.ArchivedJobObject.jobNumber}</Col>
+          <Col style={{ maxWidth: '140px', padding: '0px' }}><u>Job Number:</u></Col>
+          <Col style={{ padingLeft: '10px' }}>{this.ArchivedJobObject.jobNumber}</Col>
         </Row>
 
         <Row className="JobNumber">
-          <Col style={{maxWidth:'140px', padding:'0px'}}><u>Source:</u></Col>
-          <Col style={{padingLeft:'10px'}}>{jobArchiver.sourceBucket}/{this.ArchivedJobObject.jobNumber}</Col>
+          <Col style={{ maxWidth: '140px', padding: '0px' }}><u>Source:</u></Col>
+          <Col style={{ padingLeft: '10px' }}>{jobArchiver.sourceBucket}/{this.ArchivedJobObject.jobNumber}</Col>
         </Row>
 
         <Row className="JobNumber">
-          <Col style={{maxWidth:'140px', padding:'0px'}}><u>Destination:</u></Col>
-          <Col style={{padingLeft:'10px'}}>
+          <Col style={{ maxWidth: '140px', padding: '0px' }}><u>Destination:</u></Col>
+          <Col style={{ padingLeft: '10px' }}>
             {sourceToTargetBucketMappings[jobArchiver.sourceBucket]}/{getDestinationParentDirectory(jobArchiver.sourceBucket, jobArchiver.year, jobArchiver.month, jobArchiver.rangeFolder)}{this.ArchivedJobObject.jobNumber}
           </Col>
         </Row>
 
         <Row className="TimeSubmitted">
-          <Col style={{maxWidth:'140px', padding:'0px'}}><u>Time Submitted:</u></Col>
-          <Col style={{paddingLeft: '10px'}}>{jobArchiver.dateDisplay}</Col>
+          <Col style={{ maxWidth: '140px', padding: '0px' }}><u>Time Submitted:</u></Col>
+          <Col style={{ paddingLeft: '10px' }}>{jobArchiver.dateDisplay}</Col>
         </Row>
-        <Row className="TimeSubmitted">
-          <Col style={{maxWidth:'140px', padding:'0px'}}><u>Current file:</u></Col>
-          <Col style={{paddingLeft: '10px'}}>{this.props.archivingProgress.filename}</Col>
-        </Row>
-        <Row className="TimeSubmitted">
-          <Col style={{maxWidth:'140px', padding:'0px'}}><u>Current file size:</u></Col>
-          <Col style={{paddingLeft: '10px'}}>{this.props.archivingProgress.fileSize}</Col>
-        </Row>
+        {
+          !this.props.completed && <><Row className="TimeSubmitted">
+            <Col style={{ maxWidth: '140px', padding: '0px' }}><u>Current file:</u></Col>
+            <Col style={{ paddingLeft: '10px' }}>{this.props.archivingProgress.filename}</Col>
+          </Row>
+            <Row className="TimeSubmitted">
+              <Col style={{ maxWidth: '140px', padding: '0px' }}><u>Current file size:</u></Col>
+              <Col style={{ paddingLeft: '10px' }}>{this.props.archivingProgress.fileSize}</Col>
+            </Row></>
+        }
+
         <Row className="SubmissionResponse">
-          <Col style={{maxWidth:'140px', padding:'0px'}}><u>Submission Response:</u></Col>
-          <Col style={{paddingLeft:'10px'}}>
-            <Row style={{margin:'0 0'}}>{jobArchiver.jobArchivingStatus}</Row>
+          <Col style={{ maxWidth: '140px', padding: '0px' }}><u>Submission Response:</u></Col>
+          <Col style={{ paddingLeft: '10px' }}>
+            <Row style={{ margin: '0 0' }}>{jobArchiver.jobArchivingStatus}</Row>
           </Col>
         </Row>
 

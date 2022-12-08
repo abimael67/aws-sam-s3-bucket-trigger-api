@@ -29,10 +29,6 @@ class ConnectedArchivedJobsList extends Component {
   }
 
   placeholder(archivedJobs) {
-    //^^//console.log("testing inside ArchivedJobsList.js...")
-
-    //^^//console.log("archivedJobs:")
-    //^^//console.log(archivedJobs)
 
     if (!Array.isArray(archivedJobs) || archivedJobs.length < 1) {
       let paddingSides = '10px'
@@ -66,8 +62,7 @@ class ConnectedArchivedJobsList extends Component {
 
   render() {
     //^^//console.log("rendering archived jobs list group...")
-
-    console.log('UK: ', this.props)
+    
     let jobOrdinalNumber = 0
       return (
         <Fragment>
@@ -82,7 +77,7 @@ class ConnectedArchivedJobsList extends Component {
                     jobOrdinalNumber++;
                     if(getStatus(aj.jobArchiver.jobArchivingStatus) === SUCCESS ||
                     getStatus(aj.jobArchiver.jobArchivingStatus) === ERROR)
-                    return (<ArchivedJob key={aj.id} ArchivedJobObject={aj} jobOrdinalNumber={jobOrdinalNumber} />)
+                    return (<ArchivedJob key={aj.id} ArchivedJobObject={aj} jobOrdinalNumber={jobOrdinalNumber} completed />)
                   }
                 )
               }

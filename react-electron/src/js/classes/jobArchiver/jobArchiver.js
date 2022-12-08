@@ -56,7 +56,6 @@ async function deleteParentFolderIfEmpty(
     })
 
     let parentFolder = getParentFolder(file.Key)
-
     const params = {
       Bucket: bucket,
       Prefix: parentFolder
@@ -70,7 +69,7 @@ async function deleteParentFolderIfEmpty(
         Logging.info("Inside jobArchiver.deleteS3File during s3.deleteObject. copyData:", data)
 
         if (defined(data, "Contents.length") && data.Contents.length === 1) {
-          deleteS3File(bucket, parentFolder, region, accessKeyId, secretAccessKey, signatureVersion)
+          deleteS3File(bucket, parentFolder, region, accessKeyId, secretAccessKey, signatureVersion, true)
         }
 
       }
@@ -87,7 +86,8 @@ async function deleteS3File(
   region = config.region,
   accessKeyId = config.accessKeyId,
   secretAccessKey = config.secretAccessKey,
-  signatureVersion = 'v4'
+  signatureVersion = 'v4',
+  isFolder = false
 ) {
   try {
     const s3 = new aws.S3({
@@ -101,7 +101,7 @@ async function deleteS3File(
 
     const params = {
       Bucket: bucket,
-      Key: file.Key
+      Key: isFolder ? file : file.Key
     }
 
     s3.deleteObject(params, function (err, deleteData) {
@@ -110,9 +110,9 @@ async function deleteS3File(
       }
       else {
         Logging.info("Inside jobarchiver.deleteS3File during s3.deleteObject. copyData:", deleteData)
-        file.deleteData = deleteData
+        //file.deleteData = deleteData
 
-        //deleteParentFolderIfEmpty(bucket, file, region, accessKeyId, secretAccessKey, signatureVersion)
+        deleteParentFolderIfEmpty(bucket, file, region, accessKeyId, secretAccessKey, signatureVersion)
       }
     })
   }
@@ -153,7 +153,7 @@ class JobArchiver {
     this.dateDisplay = DateUtils.GetDateDisplay()
     this.rangeFolder = ''
     try {
-      this.archiveJob(this.sourceBucket, this.externalJobNumber, this.year, this.month, this.env)
+    //  this.archiveJob(this.sourceBucket, this.externalJobNumber, this.year, this.month, this.env)
     }
     catch (e) {
       Logging.logError("ERROR in constructor method of JobArchiver. Error:", e)
@@ -265,14 +265,12 @@ class JobArchiver {
       })
       let {folder} = await this.getCorrespondingRangeFolder()
       let rangeName = folder
-            // if (range.create) {
-      //   await this.addObjectToS3(targetBucket, )
-      // }
+    
       if (files.length && files.length > 0) {
         let iterator = 0
         let percentage = 0
        
-        store.dispatch(action(JOB_ARCHIVING_FINISHED, ARCHIVING_JOB))
+      
         ASYNC.each(files, (file, cb) => {
           let params = {
             Bucket: targetBucket,
@@ -284,7 +282,7 @@ class JobArchiver {
          
           this.currentFile = file
           //get size prop from file
-          store.dispatch(action(JOB_ARCHIVING_FINISHED, ARCHIVING_JOB))
+        
           s3.copyObject(params, (copyErr, copyData) => {
             if (copyErr) {
               Logging.logError("ERROR inside jobArchiver.moveS3Files during s3.copyObject. error:", copyErr)
@@ -311,6 +309,7 @@ class JobArchiver {
       }
       else {
         Logging.warn("Inside jobArchiver.moveS3Files(). files list was empty. files:", files)
+        store.dispatch(action(JOB_ARCHIVING_FINISHED, `${ERROR} source folder is empty`))
       }
     }
     catch (error) {
@@ -443,10 +442,10 @@ class JobArchiver {
     return SUCCESS
   }
 
-  async archiveJob(sourceBucket, externalJobNumber, year, month, env) {
+  async archiveJob(sourceBucket = this.sourceBucket,
+     externalJobNumber = this.externalJobNumber, year = this.year, month = this.month, env = this.env) {
     let newJobArchivingStatus = ""
-
-    try {
+   try {
       // GET LIST OF FILES TO BE MOVED
       let { files, folders } = await this.getS3FileList(sourceBucket, externalJobNumber)
 
@@ -487,7 +486,6 @@ class JobArchiver {
       this.errorMsgList = { error: e }
       Logging.log("ERROR in jobArchiver.archiveJob():", e)
     }
-
     // this.jobArchivingStatus = newJobArchivingStatus
 
    // store.dispatch(action(JOB_ARCHIVING_FINISHED, newJobArchivingStatus))

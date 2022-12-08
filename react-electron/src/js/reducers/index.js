@@ -48,7 +48,7 @@ const getInitialState = () => ({
 function getPreferredTheme() {
   let theme = localStorage.getItem(THEME)
 
-  if(defined(theme) && theme === THEME_LIGHT) {
+  if (defined(theme) && theme === THEME_LIGHT) {
     return THEME_LIGHT
   }
   else {
@@ -57,7 +57,7 @@ function getPreferredTheme() {
 }
 
 function rootReducer(state = getInitialState(), action) {
-  switch(action.type) {
+  switch (action.type) {
     case ADD_SYNC_APP_TO_STORE:
       return AddSyncAppToStoreReducer(state, action)
     case ADD_STITCH_APP_TO_STORE:
@@ -99,16 +99,16 @@ function rootReducer(state = getInitialState(), action) {
       return JobArchivingFinishedReducer(state, action)
     case JOB_ARCHIVING_PROGRESS:
       return JobArchivingProgressReducer(state, action)
-      
+
     case ADD_STITCHED_FILE:
       return AddStitchedFileReducer(state, action)
-//ADD_MPEG_CONVERSION_JOB
+    //ADD_MPEG_CONVERSION_JOB
     case ADD_MPEG_CONVERSION_JOB:
       return AddMpegConversionJobReducer(state, action)
     case FILE_STITCHING_QUEUED:
       return FileStitchingQueuedReducer(state, action)
     case GET_STITCHING_JOB_STATUS_UPDATE:
-      return GetStitchingJobStatusUpdateReducer(state,action)
+      return GetStitchingJobStatusUpdateReducer(state, action)
 
     default:
       return state;
@@ -130,7 +130,7 @@ function AddSyncAppToStoreReducer(state, action) {
 }
 
 function AddStitchAppToStoreReducer(state, action) {
-return Object.assign(
+  return Object.assign(
     {},
     state,
     {
@@ -153,33 +153,8 @@ function AddMpegConversionAppToStoreReducer(state, action) {
 
 function AddArticleReducer(state, action) {
   let articles = state.articles.concat(action.payload)
-  articles.sort(function(a, b) {
-    if(a.date.getTime() < b.date.getTime()) {
-      // a happened before b, therefore a will be placed
-      // second in the list, since we want to display them in
-      // reverse chronological order
-      return 1;
-    }
-    else {
-      return -1;
-    }
-  })
-
-  return Object.assign(
-    {},
-    state,
-    { 
-      ...state,
-      articles: articles
-    }
-  );
-}
-
-function AddArchivedJobReducer(state,action){
-  let archivedJobs = state.archivedJobs.concat(action.payload)
-
-  archivedJobs.sort(function(a, b) {
-    if(a.date.getTime() < b.date.getTime()) {
+  articles.sort(function (a, b) {
+    if (a.date.getTime() < b.date.getTime()) {
       // a happened before b, therefore a will be placed
       // second in the list, since we want to display them in
       // reverse chronological order
@@ -195,16 +170,42 @@ function AddArchivedJobReducer(state,action){
     state,
     {
       ...state,
-      archivedJobs: archivedJobs
+      articles: articles
+    }
+  );
+}
+
+function AddArchivedJobReducer(state, action) {
+  let archivedJobs = state.archivedJobs.concat(action.payload)
+
+  archivedJobs.sort(function (a, b) {
+    if (a.date.getTime() < b.date.getTime()) {
+      // a happened before b, therefore a will be placed
+      // second in the list, since we want to display them in
+      // reverse chronological order
+      return 1;
+    }
+    else {
+      return -1;
+    }
+  })
+
+  return Object.assign(
+    {},
+    state,
+    {
+      ...state,
+      archivedJobs: archivedJobs,
+      archivingProgress: {}
     }
   )
 }
 
-function AddStitchedFileReducer(state,action){
+function AddStitchedFileReducer(state, action) {
   let stitchedFiles = state.stitchedFiles.concat(action.payload)
 
-  stitchedFiles.sort(function(a,b) {
-    if(a.date.getTime() < b.date.getTime()) {
+  stitchedFiles.sort(function (a, b) {
+    if (a.date.getTime() < b.date.getTime()) {
       // a happened before b, therefore a will be placed
       // second in the list, since we want to display them in
       // reverse chronological order
@@ -235,7 +236,7 @@ function AddMpegConversionJobReducer(state, action) {
     state,
     {
       ...state,
-      mpegConversionVeriSuiteJobs: mpegConversionVeriSuiteJobs 
+      mpegConversionVeriSuiteJobs: mpegConversionVeriSuiteJobs
     }
   )
 }
@@ -258,12 +259,18 @@ function JobArchivingFinishedReducer(state, action) {
     {
       ...state,
       archivedJobs: state.archivedJobs
+        .map((aj, index) => {
+          if(index === 0) {
+           return Object.assign({}, { ...aj, jobArchiver: { ...aj.jobArchiver, jobArchivingStatus: action.payload } }) 
+          }
+          return aj
+        }),
     }
   )
 }
 
 function JobArchivingProgressReducer(state, action) {
-  
+
   return Object.assign(
     {},
     state,
@@ -302,7 +309,7 @@ function ToggleJobDetailsReducer(state, action) {
   return Object.assign(
     {},
     state,
-    { 
+    {
       ...state,
       articles: state.articles,
       action: action
@@ -344,7 +351,7 @@ function ClearStateActionReducer(state, action) {
     state,
     {
       ...state,
-      action: null 
+      action: null
     }
   );
 }
@@ -395,13 +402,13 @@ function RemoveDocReducer(state, action) {
     && action.payload.parentViewName === STITCH_VIEW
   ) {
     app = state.stitchApp;
-  } 
-  else if(
+  }
+  else if (
     defined(action.payload.parentViewName)
     && action.payload.parentViewName === MPEG_CONVERSION_VIEW
   ) {
     app = state.mpegConversionApp;
-  } 
+  }
   else {
     app = state.syncApp;
   }
@@ -443,9 +450,9 @@ function LogOutReducerCommonCode(state, action) {
   try {
     Auth.signOut({ global: true });
   }
-  catch(error) {
+  catch (error) {
     let e = null;
-    !error.message ? e = { "message" : error } : e = error;
+    !error.message ? e = { "message": error } : e = error;
 
     Logging.logError("Error signing out:", e)
   }
@@ -465,7 +472,7 @@ function LogOutReducer(state, action) {
 
   //^^//console.log("LogOutReducer action:");
   //^^//console.log(action);
-  
+
   action.payload.that.props.history.push("/login")
 
   return LogOutReducerCommonCode(state, action);
@@ -473,17 +480,17 @@ function LogOutReducer(state, action) {
 
 function ToggleDarkThemeReducer(state, action) {
   //^^//console.log("Inside ToggleDarkThemeReducer");
-  
+
   let theme = state.theme;
-  if(theme === THEME_DARK) {
+  if (theme === THEME_DARK) {
     theme = THEME_LIGHT
   }
   else {
     theme = THEME_DARK
   }
-  
+
   localStorage.setItem(THEME, theme)
-  
+
   return Object.assign(
     {},
     state,
@@ -500,7 +507,7 @@ function CheckUserActivityReducer(state, action) {
   let timeoutGracePeriodInHours = 2
   let timeoutGracePeriodInMilliseconds = timeoutGracePeriodInHours * 60 * 60 * 1000
 
-  if(
+  if (
     defined(state.user)
     && (
       !defined(state.lastTimeOfActivity)

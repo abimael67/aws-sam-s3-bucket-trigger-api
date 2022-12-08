@@ -1,4 +1,4 @@
-import { SUCCESS, ARCHIVING_JOB } from './../../../../constants/job_archiving_statuses'
+import { SUCCESS, ARCHIVING_JOB, ERROR } from './../../../../constants/job_archiving_statuses'
 
 export default function getStatus(status){
     let newStatus = status
@@ -8,6 +8,7 @@ export default function getStatus(status){
           newStatus = SUCCESS
         else
         newStatus = ARCHIVING_JOB
-    }
+    }else if(status.includes('Error(s)'))
+      newStatus = ERROR
     return newStatus
 }

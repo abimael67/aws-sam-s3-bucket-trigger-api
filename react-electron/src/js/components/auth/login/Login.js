@@ -12,7 +12,6 @@ import './../Auth.scss'
 
 var DEV_CREDENTIALS
 try {
-  console.log('isDev: ',isDev)
   if(isDev) {
     DEV_CREDENTIALS = JSON.parse(File.getContent(AUTH_CONSTANTS.DEV_CREDENTIALS))
   }

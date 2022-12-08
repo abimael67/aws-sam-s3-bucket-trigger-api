@@ -4,6 +4,7 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const isDev = require("electron-is-dev");
+const { default: installExtension, REDUX_DEVTOOLS } = require('electron-devtools-installer');
 require('@electron/remote/main').initialize()
 let mainWindow;
 
@@ -81,14 +82,12 @@ app.on("ready", () => {
   //^^//console.log("app is ready...")
   // Create the main window
   createWindow();
-  try {
-    // Check for update after two seconds
-    //setTimeout(CheckForUpdates, 2000);
-    //CheckForUpdates();
-  }
-  catch (e) {
-    //^^//console.log(`Error at setTimeout(CheckForUpdates(). Error: ${e})`);
-  }
+});
+
+app.whenReady().then(() => {
+  installExtension(REDUX_DEVTOOLS)
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err));
 });
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {

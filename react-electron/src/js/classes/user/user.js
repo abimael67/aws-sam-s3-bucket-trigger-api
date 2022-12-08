@@ -21,13 +21,12 @@ class User {
       //^^//console.log(users)
 
       let selectedUser = null;
-      
       users[environment].forEach(user => {
-        if (user.username === cognitoUser.username ) {
+        if (user.username === cognitoUser.username) {
           selectedUser = user;
         }
       })
-      
+
       this.cognitoUser = cognitoUser;
       this.contactName = selectedUser.contactName;
       this.contactEmail = selectedUser.contactEmail;
@@ -69,7 +68,7 @@ class User {
     //^^//console.log("chooseEnvironment isDev:")
     //^^//console.log(isDev);
 
-    if(isDev) {
+    if (isDev) {
       return DEV
     }
     else {
