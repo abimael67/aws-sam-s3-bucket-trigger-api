@@ -309,7 +309,7 @@ class JobArchiver {
       }
       else {
         Logging.warn("Inside jobArchiver.moveS3Files(). files list was empty. files:", files)
-        store.dispatch(action(JOB_ARCHIVING_FINISHED, `${ERROR} source folder is empty`))
+        store.dispatch(action(JOB_ARCHIVING_FINISHED, `${ERROR} source folder empty or does not exist`))
       }
     }
     catch (error) {
