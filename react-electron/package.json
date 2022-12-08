@@ -4,7 +4,7 @@
   "description": "Desktop application to send out jobs for further processing.",
   "author": "Veritext",
   "build": {
-    "appId": "com.albrechtsoft.thesyncer",
+    "appId": "com.veritext.verisuite",
     "directories": {
       "buildResources": "."
     },
