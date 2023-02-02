@@ -33,7 +33,7 @@ class ConnectedJobArchiving extends Component {
         }} 
         className="form" onSubmit={this.handleSubmit}>
         <Form.Row style={{height:'100%'}}>
-          <Col xs={6} style={{paddingBottom:'20px', display:'flex', flexDirection:'column'}}>
+          <Col xs={7} style={{paddingBottom:'20px', display:'flex', flexDirection:'column'}}>
             <Form.Row style={{maxHeight:'35px'}}>{ SectionTitle('Media Archiving' ) }</Form.Row>
             <Form.Row style={{marginTop:'20px'}}>{ this.SourceFields() }</Form.Row>
             <Form.Row style={{marginTop:'15px'}}> <InProgressJobsList /></Form.Row>
@@ -41,7 +41,7 @@ class ConnectedJobArchiving extends Component {
             <Form.Row style={{maxHeight:'35px'}}>{ this.ArchiveJobButton() }</Form.Row>
           </Col>
           
-          <Col xs={6} className="submittedJobsCol">
+          <Col xs={5} className="submittedJobsCol">
             <ArchivedJobsList />
           </Col> 
         </Form.Row>

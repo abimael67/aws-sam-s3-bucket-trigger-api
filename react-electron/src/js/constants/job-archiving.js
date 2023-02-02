@@ -29,7 +29,7 @@ function getDestinationParentDirectory(sourceBucket, year, month, range) {
     result = `From Videographers/${range || ''}/`
   }
   else if(sourceBucket === SOURCE_BUCKETS.vxtzoom01) {
-    result = `zoom/`
+    result = `zoom/${year}/${month}/`
   }
   else {
     throw Error('ERROR: getDestinationParentDirectory(): invalid sourceBucket value')
