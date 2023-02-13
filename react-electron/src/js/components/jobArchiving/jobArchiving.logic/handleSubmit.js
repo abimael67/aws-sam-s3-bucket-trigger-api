@@ -21,9 +21,6 @@ async function handleSubmit(event) {
  
   try {
     if (errorPresent === false) {
-
-      // ARCHIVE JOB
-      //TODO: Implement
       if (defined(storeState.user)) {
         storeState.user.resetLastTimeOfActivity()
 
@@ -47,8 +44,10 @@ async function handleSubmit(event) {
           date: date
         })
         jobArchiver.archiveJob()
+        let defaultState = getConstructorState();
+        delete defaultState.sourceBucket
         this.setState((state, props) => ({
-          ...getConstructorState(),
+          ...defaultState,
           errors: state.errors
         }))
       }

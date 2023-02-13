@@ -64,7 +64,6 @@ class ConnectedInProgressJobsList extends Component {
   render() {
    
     let jobOrdinalNumber = 0
-   
     return (
       <Fragment>
         <Form.Label className="textFieldLabel">In Progress Jobs</Form.Label>

@@ -8,9 +8,10 @@ function SourceFields() {
     this.setState({ sourceBucket: bucketName })
   }
   const { SOURCE_BUCKETS } = JOB_ARCHIVING_CONSTANTS
+
   return (
     <div style={{ width: '100%' }}>
-      <Tabs defaultActiveKey="vxtprod" onSelect={changeBucket}>
+      <Tabs defaultActiveKey="vxtprod" onSelect={changeBucket} activeKey={this.state.sourceBucket}>
         {
           Object.entries(SOURCE_BUCKETS).map(bucket =>
             <Tab style={{ width: '100%' }} key={bucket[0]} eventKey={bucket[0]} title={bucket[0]}>
