@@ -66,13 +66,13 @@ function DestinationFields() {
             <Form.Label style={{paddingTop:'35px', color: 'darkgrey'}}>/</Form.Label>
           </Form.Group>
 
-          { this.Year() }
+          { this.state.year }
 
           <Form.Group as={Col} className="textFieldLabel" style={{padding:'0', paddingLeft:'1px', paddingRight:'1px', maxWidth:'8px'}}>
             <Form.Label style={{paddingTop:'35px', color: 'darkgrey'}}>/</Form.Label>
           </Form.Group> 
 
-          { this.Month() }
+          { this.state.month }
 
           <Form.Group as={Col} className="textFieldLabel" style={{padding:'0', paddingLeft:'1px', paddingRight:'1px', maxWidth:'8px'}}>
             <Form.Label style={{paddingTop:'35px', color: 'darkgrey'}}>/</Form.Label>
