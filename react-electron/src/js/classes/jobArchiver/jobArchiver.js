@@ -219,12 +219,13 @@ class JobArchiver {
       })
 
       Logging.log("accessKeyId:", accessKeyId, "secretAccessKey:", secretAccessKey)
-
+      let prefix = bucket === JOB_ARCHIVING_CONSTANTS.SOURCE_BUCKETS.vxtzoom01 ? 
+      `${this.year}/${this.month}/${parentFolder}` : parentFolder
       let params = {
         Bucket: bucket,
-        Prefix: `${this.year}/${this.month}/${parentFolder}`,
+        Prefix: prefix,
       }
-
+      console.log("Get file list Params: ", params)
       const responseData = await s3.listObjectsV2(params).promise()
       const responseStructure = await s3.listObjectsV2({ ...params, Delimiter: '/' }).promise()
       Logging.log("jobArchiver.getS3Files() response:", responseData)
@@ -275,7 +276,6 @@ class JobArchiver {
           let splitFolderName = file.Key.split("/")
           let jobFolderAndFile = sourceBucket === JOB_ARCHIVING_CONSTANTS.SOURCE_BUCKETS.vxtzoom01 ?
           `${splitFolderName[splitFolderName.length -2]}/${splitFolderName[splitFolderName.length -1]}` : file.Key
-           console.log("FLF: ", file.Key)
           let params = {
             Bucket: targetBucket,
             CopySource: `/${sourceBucket}/${file.Key}`,

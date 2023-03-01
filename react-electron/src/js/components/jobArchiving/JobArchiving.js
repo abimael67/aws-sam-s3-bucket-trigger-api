@@ -17,11 +17,6 @@ class ConnectedJobArchiving extends Component {
   }
 
   render() {
-
-    console.log("JobArchiving. sourceBuckets:")
-    console.log(JOB_ARCHIVING_CONSTANTS.SOURCE_BUCKETS)
-    console.log("JobArchiving. sourceToTargetBucketMappings:")
-    console.log(JOB_ARCHIVING_CONSTANTS.sourceToTargetBucketMappings)
     
     return (
       <div style={{height:'100%'}} className="main">
