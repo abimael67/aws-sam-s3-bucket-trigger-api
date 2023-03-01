@@ -222,7 +222,7 @@ class JobArchiver {
 
       let params = {
         Bucket: bucket,
-        Prefix: parentFolder,
+        Prefix: `${this.year}/${this.month}/${parentFolder}`,
       }
 
       const responseData = await s3.listObjectsV2(params).promise()
@@ -272,11 +272,15 @@ class JobArchiver {
        
       
         ASYNC.each(files, (file, cb) => {
+          let splitFolderName = file.Key.split("/")
+          let jobFolderAndFile = sourceBucket === JOB_ARCHIVING_CONSTANTS.SOURCE_BUCKETS.vxtzoom01 ?
+          `${splitFolderName[splitFolderName.length -2]}/${splitFolderName[splitFolderName.length -1]}` : file.Key
+           console.log("FLF: ", file.Key)
           let params = {
             Bucket: targetBucket,
             CopySource: `/${sourceBucket}/${file.Key}`,
             //Key: `${year}/${month}/${file.Key}`
-            Key: `${JOB_ARCHIVING_CONSTANTS.getDestinationParentDirectory(sourceBucket, year, month, rangeName)}${file.Key}`
+            Key: `${JOB_ARCHIVING_CONSTANTS.getDestinationParentDirectory(sourceBucket, year, month, rangeName)}${jobFolderAndFile}`
           }
          
          

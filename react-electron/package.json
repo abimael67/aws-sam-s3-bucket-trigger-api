@@ -1,6 +1,6 @@
 {
   "name": "VeriSuite",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Desktop application to send out jobs for further processing.",
   "author": "Veritext",
   "build": {

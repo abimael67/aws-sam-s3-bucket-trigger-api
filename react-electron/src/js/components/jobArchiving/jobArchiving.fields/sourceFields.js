@@ -17,31 +17,46 @@ function SourceFields() {
             if (this.state.sourceBucket === "vxtzoom01")
               return (
                 <Tab style={{ width: '100%' }} key={bucket[0]} eventKey={bucket[0]} title={bucket[0]}>
-                  <Form.Row style={{maxHeight: '60px', marginBottom: '5px', borderWidth: '2px', borderColor: 'white' }}>
+                 
+                  <Form.Group as={Col} className="textFieldLabel"
+                    style={{ borderWidth: '1px', borderColor: 'white', borderStyle: 'solid', padding: '10px', width: '100%', minHeight: '230px' }}
+                  >
+                    <Form.Row>
+                      <Form.Group as={Col} className="textFieldLabel" style={{ padding: '0', paddingLeft: '1px', paddingRight: '1px', maxWidth: '8px' }}>
+                        <Form.Label style={{ paddingTop: '43px', color: 'darkgrey' }}></Form.Label>
+                      </Form.Group>
+                      {this.Year()}
+                      {this.Month()}
+                      {this.JobNumberTextField()}
 
-                  <Form.Group as={Col} className="textFieldLabel" style={{ padding: '0', paddingLeft: '1px', paddingRight: '1px', maxWidth: '8px' }}>
-                   
+                    </Form.Row>
+                    <Form.Row style={{ marginTop: '15px', maxHeight: '35px', marginBottom: '5px', borderWidth: '2px', borderColor: 'white' }}>
+                      {this.DestinationFields()}
+                    </Form.Row>
                   </Form.Group>
 
-                  {this.Year()}
-
-                  <Form.Group as={Col} className="textFieldLabel" style={{ padding: '0', paddingLeft: '1px', paddingRight: '1px', maxWidth: '8px' }}>
-                   
-                  </Form.Group>
-
-                  {this.Month()}
-
-                  <Form.Group as={Col} className="textFieldLabel" style={{ padding: '0', paddingLeft: '1px', paddingRight: '1px', maxWidth: '8px' }}>
-                  
-                  </Form.Group>
-                  </Form.Row>
-                  {this.JobNumberTextField()}
                 </Tab>
               )
             else
               return (
                 <Tab style={{ width: '100%' }} key={bucket[0]} eventKey={bucket[0]} title={bucket[0]}>
-                  {this.JobNumberTextField()}
+                  
+
+                  <Form.Group as={Col} className="textFieldLabel"
+                    style={{ borderWidth: '1px', borderColor: 'white', borderStyle: 'solid', padding: '10px', width: '100%', minHeight: '230px' }}
+                  >
+                    <Form.Row>
+                      <Form.Group as={Col} className="textFieldLabel" style={{ padding: '0', paddingLeft: '1px', paddingRight: '1px', maxWidth: '8px' }}>
+                        <Form.Label style={{ paddingTop: '43px', color: 'darkgrey' }}></Form.Label>
+                      </Form.Group>
+                    
+                      {this.JobNumberTextField()}
+
+                    </Form.Row>
+                    <Form.Row style={{ marginTop: '15px', maxHeight: '35px', marginBottom: '5px', borderWidth: '2px', borderColor: 'white' }}>
+                      {this.DestinationFields()}
+                    </Form.Row>
+                  </Form.Group>
                 </Tab>)
           })
         }
