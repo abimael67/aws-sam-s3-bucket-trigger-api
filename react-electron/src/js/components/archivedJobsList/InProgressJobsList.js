@@ -74,7 +74,7 @@ class ConnectedInProgressJobsList extends Component {
              this.props.archivedJobs.map(
                 aj => {
                   jobOrdinalNumber++;
-                  if(getStatus(aj.jobArchiver.jobArchivingStatus) === ARCHIVING_JOB )
+                  if(aj.jobArchiver && getStatus(aj.jobArchiver.jobArchivingStatus) === ARCHIVING_JOB )
                       return (<ArchivedJob key={aj.id} ArchivedJobObject={aj} jobOrdinalNumber={jobOrdinalNumber} />)
                 }
               )

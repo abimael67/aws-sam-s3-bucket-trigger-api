@@ -275,15 +275,15 @@ class JobArchiver {
         ASYNC.each(files, (file, cb) => {
           let splitFolderName = file.Key.split("/")
           let jobFolderAndFile = sourceBucket === JOB_ARCHIVING_CONSTANTS.SOURCE_BUCKETS.vxtzoom01 ?
-          `${splitFolderName[splitFolderName.length -2]}/${splitFolderName[splitFolderName.length -1]}` : file.Key
+          splitFolderName.splice(2, splitFolderName.length).join("/") : file.Key
+          let fullDestRoute =  `${JOB_ARCHIVING_CONSTANTS.getDestinationParentDirectory(sourceBucket, year, month, rangeName)}${jobFolderAndFile}`
           let params = {
             Bucket: targetBucket,
             CopySource: `/${sourceBucket}/${file.Key}`,
             //Key: `${year}/${month}/${file.Key}`
-            Key: `${JOB_ARCHIVING_CONSTANTS.getDestinationParentDirectory(sourceBucket, year, month, rangeName)}${jobFolderAndFile}`
+            Key: fullDestRoute
           }
-         
-         
+                  
           this.currentFile = file
           //get size prop from file
         
