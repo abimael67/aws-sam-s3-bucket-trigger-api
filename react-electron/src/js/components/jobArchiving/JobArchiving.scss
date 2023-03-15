@@ -6,6 +6,9 @@
     }
 }
 
-.nav-link, .nav-link:hover{
-    color:white;
+.nav-link, .nav-link:hover, .nav-link:active{
+    
+    @include themify ($themes) {
+        color: themed('main-color')
+    }
 }

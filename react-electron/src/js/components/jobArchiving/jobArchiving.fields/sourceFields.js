@@ -19,7 +19,7 @@ function SourceFields() {
                 <Tab style={{ width: '100%' }} key={bucket[0]} eventKey={bucket[0]} title={bucket[0]}>
                  
                   <Form.Group as={Col} className="textFieldLabel"
-                    style={{ borderWidth: '1px', borderColor: 'white', borderStyle: 'solid', padding: '10px', width: '100%', minHeight: '230px' }}
+                    style={{ borderWidth: '1px', borderStyle: 'solid', padding: '10px', width: '100%', minHeight: '230px' }}
                   >
                     <Form.Row>
                       <Form.Group as={Col} className="textFieldLabel" style={{ padding: '0', paddingLeft: '1px', paddingRight: '1px', maxWidth: '8px' }}>
@@ -43,7 +43,7 @@ function SourceFields() {
                   
 
                   <Form.Group as={Col} className="textFieldLabel"
-                    style={{ borderWidth: '1px', borderColor: 'white', borderStyle: 'solid', padding: '10px', width: '100%', minHeight: '230px' }}
+                    style={{ borderWidth: '1px',  borderStyle: 'solid', padding: '10px', width: '100%', minHeight: '230px' }}
                   >
                     <Form.Row>
                       <Form.Group as={Col} className="textFieldLabel" style={{ padding: '0', paddingLeft: '1px', paddingRight: '1px', maxWidth: '8px' }}>
