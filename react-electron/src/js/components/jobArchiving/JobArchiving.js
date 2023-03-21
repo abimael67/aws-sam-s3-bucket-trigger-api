@@ -32,7 +32,7 @@ class ConnectedJobArchiving extends Component {
             <Form.Row style={{maxHeight:'35px'}}>{ SectionTitle('Media Archiving' ) }</Form.Row>
             <Form.Row style={{marginTop:'20px'}}>{ this.SourceFields() }</Form.Row>
             <Form.Row style={{marginTop:'15px'}}> <InProgressJobsList /></Form.Row>
-            <Form.Row style={{maxHeight:'20px'}}>{ this.FormErrors() }</Form.Row>
+            <Form.Row style={{maxHeight:'20px', marginBottom:"15px"}}>{ this.FormErrors() }</Form.Row>
             <Form.Row style={{maxHeight:'35px'}}>{ this.ArchiveJobButton() }</Form.Row>
           </Col>
           

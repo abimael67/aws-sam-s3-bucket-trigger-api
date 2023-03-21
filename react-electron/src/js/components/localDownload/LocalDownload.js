@@ -33,7 +33,7 @@ class ConnectedLocalDownload extends Component {
         >
           <Form.Row style={{height:'100%'}}>
             <Col xs={6} style={{paddingBottom:'20px', display:'flex', flexDirection:'column', maxHeight:'300px'}}>
-              <Form.Row style={{maxHeight:'35px'}}>{ SectionTitle('Local Download' ) }</Form.Row>
+              <Form.Row style={{maxHeight:'35px', marginBottom:"20px"}}>{ SectionTitle('Local Download' ) }</Form.Row>
               <Form.Row style={{marginTop:'15px'}}>{ this.SourceFields() }</Form.Row>
               <Form.Row style={{maxHeight:'20px'}}>{ this.FormErrors() }</Form.Row>
               <Form.Row style={{maxHeight:'35px'}}>{ this.LocalDownloadButton() }</Form.Row>

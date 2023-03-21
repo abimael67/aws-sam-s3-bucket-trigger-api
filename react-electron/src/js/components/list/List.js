@@ -61,7 +61,7 @@ class ConnectedList extends Component {
             paddingRight:paddingSides,
             paddingTop:paddingTop,
             width: `100%`,
-            color:'darkgrey',
+            color:'white',
             fontSize:'14px',
           }}
           

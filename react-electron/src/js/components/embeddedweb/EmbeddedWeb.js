@@ -17,7 +17,7 @@ function WithRouterEmbeddedWeb(props) {
     // )
     currentWindow.setBrowserView(view);
     view.setAutoResize({ width: true, height: true });
-    view.setBounds({ x: 0, y: 115, width: currentWindow.getBounds().width, height: currentWindow.getBounds().height - 190 });
+    view.setBounds({ x: 0, y: 120, width: currentWindow.getBounds().width, height: currentWindow.getBounds().height - 190 });
       
     view.webContents.loadURL("http://10.250.32.158:5000");
     view.webContents.on('did-finish-load', () => {
@@ -27,7 +27,7 @@ function WithRouterEmbeddedWeb(props) {
     })
 
     return (
-        <div style={{textAlign:"left !important"}} className="main">
+        <div style={{textAlign:"left !important", marginBottom: "20px"}} className="main">
             <Col>{SectionTitle('Media Clipping')}</Col>
         </div >
     )

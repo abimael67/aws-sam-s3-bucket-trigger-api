@@ -6,9 +6,17 @@
     }
 }
 
-.nav-link, .nav-link:hover, .nav-link:active{
+.nav-link:hover, .nav-link.active{
     
     @include themify ($themes) {
-        color: themed('main-color')
+        color: themed('tab-color');
+        background-color: themed('tab-background-color');
+    }
+}
+.nav-link{
+    
+    @include themify ($themes) {
+        color: themed('main-color');
+     
     }
 }

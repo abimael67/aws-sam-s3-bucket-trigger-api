@@ -19,6 +19,8 @@ $themes: (
     job-header-background-color: $dark-job-header-background-color,
     task-header-background-color: $dark-task-header-background-color,
     list-item-dragging-background-color: $dark-list-item-dragging-background-color,
+    tab-background-color: $dark-tab-background-color,
+    tab-color: $dark-tab-color
   ),
   light: (
     main-background-color: $light-main-background-color,
@@ -36,7 +38,9 @@ $themes: (
     list-header-background-color: $light-list-header-background-color,
     job-header-background-color: $light-job-header-background-color,
     task-header-background-color: $light-task-header-background-color,
-    list-item-dragging-background-color: $light-list-item-dragging-background-color
+    list-item-dragging-background-color: $light-list-item-dragging-background-color,
+    tab-background-color: $light-tab-background-color,
+    tab-color: $light-tab-color
   )
 );
 
