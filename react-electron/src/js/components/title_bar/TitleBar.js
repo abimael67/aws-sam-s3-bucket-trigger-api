@@ -35,7 +35,7 @@ class WithRouterTitleBar extends Component {
           <div id="app-title">VeriSuite</div>
         </Col>
         <Col >
-          <div style={{paddingTop:'5px'}}>v 2.0.4 BETA</div>
+          <div style={{paddingTop:'5px'}}>v 2.0.5 BETA</div>
         </Col>
        
         
