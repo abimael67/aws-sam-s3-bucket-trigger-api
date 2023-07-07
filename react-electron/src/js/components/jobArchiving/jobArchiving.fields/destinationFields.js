@@ -90,7 +90,7 @@ function DestinationFields() {
   }
   else {
     let targetBucket = sourceToTargetBucketMappings[this.state.sourceBucket]
-
+    console.log("Target Bucket: ", targetBucket, this.state.sourceBucket)
     return (
       <Form.Group as={Col} className="textFieldLabel"
         style={{ borderWidth: '1px', borderColor: 'white', borderStyle: 'solid', padding: '10px' }}

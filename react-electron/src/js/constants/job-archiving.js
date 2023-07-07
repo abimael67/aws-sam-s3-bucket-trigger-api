@@ -3,13 +3,13 @@ import ENVS from './environments'
 import getEnv from './../utils/get-env'
 import isDev from '../utils/is-dev'
 const SOURCE_BUCKETS = {
-  vxtprod:  "vxtprod",
-  videoin01: isDev ? "vxttest003" : "videoin01",
-  vxtzoom01: "vxtzoom01"
+  vxtprod:  isDev ? "dev-vxtprod" : "vxtprod",
+  videoin01: isDev ? "dev-videoin01" : "videoin01",
+  vxtzoom01: isDev ? "dev-vxtarc" : "vxtzoom01"
 }
 const DESTINATION_BUCKETS = {
-  vxtarcOrVxttest004: (getEnv() === ENVS.PROD ? "vxtarc" : "vxttest004"),
-  archive_originals: isDev ? "vxttest004" : "archive_originals"
+  vxtarcOrVxttest004: isDev ? "dev-vxtarc" : "vxtarc",
+  archive_originals: isDev ? "dev-archive-originals" : "archive_originals"
 }
 
 const sourceToTargetBucketMappings = {
@@ -21,6 +21,7 @@ const sourceToTargetBucketMappings = {
 
 
 function getDestinationParentDirectory(sourceBucket, year, month, range) {
+  console.log("ENV: ", isDev)
   let result = ""
   if(sourceBucket === SOURCE_BUCKETS.vxtprod) {
     result = `${year}/${month}/`

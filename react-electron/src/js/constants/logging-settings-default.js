@@ -1,5 +1,5 @@
 const loggingSettingsDefault = {
-  "logToFile": false,
+  "logToFile": true,
   "masterLogLevel": "warn",
   "logFileLogLevel": "warn"
 }

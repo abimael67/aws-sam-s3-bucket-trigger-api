@@ -11,12 +11,13 @@ function SourceFields() {
 
   return (
     <div style={{ width: '100%' }}>
-      <Tabs defaultActiveKey="vxtprod" onSelect={changeBucket} activeKey={this.state.sourceBucket}>
+      <Tabs defaultActiveKey={SOURCE_BUCKETS["vxtprod"]} onSelect={changeBucket} activeKey={this.state.sourceBucket}>
         {
           Object.entries(SOURCE_BUCKETS).map(bucket => {
-            if (this.state.sourceBucket === "vxtzoom01")
+            console.log("Current State: ", this.state.sourceBucket, bucket)
+            if (this.state.sourceBucket === SOURCE_BUCKETS["vxtzoom01"])
               return (
-                <Tab style={{ width: '100%' }} key={bucket[0]} eventKey={bucket[0]} title={bucket[0]}>
+                <Tab style={{ width: '100%' }} key={bucket[1]} eventKey={bucket[1]} title={bucket[0]}>
                  
                   <Form.Group as={Col} className="textFieldLabel"
                     style={{ borderWidth: '1px', borderStyle: 'solid', padding: '10px', width: '100%', minHeight: '230px' }}
@@ -39,7 +40,7 @@ function SourceFields() {
               )
             else
               return (
-                <Tab style={{ width: '100%' }} key={bucket[0]} eventKey={bucket[0]} title={bucket[0]}>
+                <Tab style={{ width: '100%' }} key={bucket[1]} eventKey={bucket[1]} title={bucket[0]}>
                   
 
                   <Form.Group as={Col} className="textFieldLabel"

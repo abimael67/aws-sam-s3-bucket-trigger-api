@@ -1,13 +1,14 @@
 import defined from './defined'
 
-
 function isDevFunc() {
-  const nodeEnv = process.env.NODE_ENV
-  let result = false
-  return result
+   const nodeEnv = process.env.NODE_ENV
+  // console.log("nodeEnv:")
+  // console.log(nodeEnv)
+   let result = false
+  // return result
 
-  console.log("nodeEnv:")
-  console.log(nodeEnv)
+  // console.log("nodeEnv:")
+  // console.log(nodeEnv)
 
   if( !defined(process, "env.NODE_ENV") || (defined(nodeEnv) && nodeEnv === 'development') ) {
     result = true
