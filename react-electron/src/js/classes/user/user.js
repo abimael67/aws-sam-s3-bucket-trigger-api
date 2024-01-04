@@ -1,10 +1,10 @@
 import defined from './../../utils/defined'
-import users from './users'
 import isDev from './../../utils/is-dev'
 import { DEV, PROD } from './../../constants/environments'
 
+
 class User {
-  constructor(cognitoUser) {
+  constructor(cognitoUser, s3Users) {
     this.username = null;
     this.assignedUserEmail = null;
     this.contactEmail = null;
@@ -12,16 +12,16 @@ class User {
     this.contactPhone = null;
     this.lastTimeOfActivity = new Date();
 
-    if (defined(cognitoUser)) {
+    if (defined(cognitoUser) ) {
       let environment = this.chooseEnvironment();
+  
       //^^//console.log("User constructor cognitoUser:");     
       //^^//console.log(cognitoUser);     
 
       //^^//console.log("users:");
       //^^//console.log(users)
-
       let selectedUser = null;
-      users[environment].forEach(user => {
+      s3Users[environment].forEach(user => {
         if (user.username === cognitoUser.username) {
           selectedUser = user;
         }

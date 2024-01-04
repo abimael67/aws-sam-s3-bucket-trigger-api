@@ -60,7 +60,7 @@ async function handleConfirm(event) {
       // SET STATE FOR THE REDUX STORE
       let payload = {
         type: USER_LOGGED_IN,
-        user: new User(newState.cognitoUser)
+        user: new User(newState.cognitoUser, this.state.s3Users)
       }
       store.dispatch(action(USER_LOGGED_IN, payload))
       

@@ -11,8 +11,10 @@ let mainWindow;
 let allowDevTools = false;
 if(isDev) {
   allowDevTools = true;
+}else {
+  process.env.NODE_ENV = 'production'
 }
-allowDevTools = false;
+
 async function createWindow() {
   //^^//console.log("Creating Window...")
   //^^//console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")

@@ -9,6 +9,7 @@ import isDev from './../../../utils/is-dev'
 import File from './../../../utils/file'
 import AUTH_CONSTANTS from '../../../constants/auth';
 import './../Auth.scss'
+import getJsonFromS3 from "../../../classes/user/s3Users"
 
 var DEV_CREDENTIALS
 try {
@@ -35,7 +36,8 @@ async function logInForDev(loginComponent) {
 }
 
 class Login extends Component {
-  componentDidMount() {
+  async componentDidMount() {
+    this.state.s3Users = await  getJsonFromS3()
     logInForDev(this)
   }
 
@@ -43,6 +45,7 @@ class Login extends Component {
     super(props);
     logicConstructor.bind(this)(props);
     fieldBind.bind(this)();
+   
   }
 
   MainFields() {
