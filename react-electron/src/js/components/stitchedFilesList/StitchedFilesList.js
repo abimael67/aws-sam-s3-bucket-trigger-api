@@ -22,19 +22,27 @@ class ConnectedStitchedFilesList extends Component {
   constructor(props){
     super(props)
     this.stitchedFiles = props.stitchedFiles
-    console.log("props.stitchedFiles:")
-    console.log(props.stitchedFiles)
+    //^^//console.log("props.stitchedFiles:")
+    //^^//console.log(props.stitchedFiles)
     this.render = this.render.bind(this)
     this.placeholder = this.placeholder.bind(this)
   }
 
   placeholder(stitchedFiles) {
-    console.log("testing inside ConnectedStitchedFilesList.js...")
+    //^^//console.log("testing inside ConnectedStitchedFilesList.js...")
 
-    console.log("stitchedFiles:")
-    console.log(stitchedFiles)
+    //^^//console.log("stitchedFiles:")
+    //^^//console.log(stitchedFiles)
+    let componentVariantFileNumber = 0
+    this.props.stitchedFiles.map(
+      sf => {
+        if(sf.fileStitcher.componentVariant === this.props.componentVariant) {
+          componentVariantFileNumber++
+        }
+      }
+    )
 
-    if(!Array.isArray(stitchedFiles) || stitchedFiles.length < 1){
+    if(!Array.isArray(stitchedFiles) || stitchedFiles.length < 1 || componentVariantFileNumber < 1){
       let paddingSides = '10px'
       let paddingTop = paddingSides
 
@@ -65,7 +73,7 @@ class ConnectedStitchedFilesList extends Component {
   }
 
   render() {
-    console.log("rendering stitched jobs list group...")
+    //^^//console.log("rendering stitched jobs list group...")
 
     let fileOrdinalNumber = 0
 
@@ -78,10 +86,16 @@ class ConnectedStitchedFilesList extends Component {
             {
               this.props.stitchedFiles.map(
                 sf => {
-                  fileOrdinalNumber++
 
-                  //return null
-                  return ( <StitchedFile key={sf.id} StitchedFileObject={sf} fileOrdinalNumber={fileOrdinalNumber} />)
+                  if(sf.fileStitcher.componentVariant === this.props.componentVariant) {
+                    fileOrdinalNumber++
+
+                    //return null
+                    return ( <StitchedFile key={sf.id} StitchedFileObject={sf} fileOrdinalNumber={fileOrdinalNumber} />)
+                  }
+                  else {
+                    return null
+                  }
                 }
               )
             }

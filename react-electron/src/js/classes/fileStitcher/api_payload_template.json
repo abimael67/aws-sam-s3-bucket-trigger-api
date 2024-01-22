@@ -1,0 +1,7 @@
+{
+  "template_id": "template_id_val",
+  "inputs": "inputs_val_object",
+  "outputs": {
+      "output1": {"path_format": "path_format_val" }
+  }
+}

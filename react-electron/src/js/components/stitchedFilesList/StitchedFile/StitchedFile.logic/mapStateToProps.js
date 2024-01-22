@@ -1,36 +1,48 @@
 import UpdateComponent from './updateComponent'
 import defined from './../../../../utils/defined'
-import { FILE_STITCHING_FINISHED } from './../../../../constants/action-types'
+import { FILE_STITCHING_QUEUED, TOGGLE_JOB_DETAILS, RECEIVED_MPEG_CONVERSION_JOB_UPDATE, MPEG_CONVERSION_THIRD_PARTY_JOB_CREATED } from './../../../../constants/action-types'
+import Logging from './../../../../utils/logging'
+import firstEqualsOneOfTheOthers from './../../../../utils/first-equals-one-of-the-others'
+
 const uuidv4 = window.require("uuid/v4")
 
 function mapStateToProps(state, ownProps){
-  console.log("Inside StitchedFile Logic mapStateToProps...")
-  console.log("state.stitchedFiles:")
-  console.log(state.stitchedFiles)
+  Logging.LogSectionStart("Inside StitchedFile Logic mapStateToProps...")
+  Logging.log("state:", state, "ownProps: ", ownProps)
 
   let update = {}
 
   state.stitchedFiles.forEach(file => {
     if(file.id === ownProps.StitchedFileObject.id){
-      if(defined(state.stitchedFile)){
-        console.log("state.action")
-        console.log(state.action)
-      }
+      Logging.log("We have found the states.stitchedFiles record that matches the current StitchedFile object.")
 
       if(
-        defined(state.action)
-        && (state.action.type === FILE_STITCHING_FINISHED)
-        && (file.id === state.action.payload.StitchedFileObject.id)
+        defined(state, "action.type", "action.payload")
+        && (
+          (
+            firstEqualsOneOfTheOthers(state.action.type, FILE_STITCHING_QUEUED, TOGGLE_JOB_DETAILS)
+            && defined(state.action.payload, "StitchedFileObject.id")
+            && file.id === state.action.payload.StitchedFileObject.id
+          )
+          || (
+            firstEqualsOneOfTheOthers(state.action.type, MPEG_CONVERSION_THIRD_PARTY_JOB_CREATED, RECEIVED_MPEG_CONVERSION_JOB_UPDATE)                
+            && defined(state.action.payload.veriSuiteJobId)
+            && file.id === state.action.payload.veriSuiteJobId
+          )
+        )
       ){
         UpdateComponent(state)
 
         update.TriggerRender = uuidv4()
       }
       else {
+        Logging.log("Setting update.fileStitchingStatus equal to file.fileStitcher.fileStitchingStatus", "current file:", file)
         update.fileStitchingStatus = file.fileStitcher.fileStitchingStatus
       }
     }
   })
+
+  Logging.LogSectionEnd()
 
   return update
 }

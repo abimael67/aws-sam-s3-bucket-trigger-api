@@ -1,0 +1,5 @@
+{
+	"logToFile":true,
+	"masterLogLevel":"warn",
+	"logFileLogLevel":"warn"
+}

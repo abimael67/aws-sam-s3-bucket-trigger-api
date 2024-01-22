@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import rootReducer from "../reducers/index";
 import { rootMiddleware } from "../middleware/index"
 //import { forbiddenWordsMiddleware } from "../middleware";
@@ -13,8 +13,8 @@ const store = createStore(
   )
 );
 */
-const enhancer = applyMiddleware(rootMiddleware, thunk);
-const store = createStore(rootReducer, enhancer);
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(rootMiddleware, thunk)));
 
 /*
 const store = createStore(

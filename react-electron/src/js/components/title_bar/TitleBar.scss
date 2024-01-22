@@ -26,7 +26,6 @@ body {
   width: 45px;
   text-align: center;
   align-content: center;
-  vertical-align: top;
   @include themify($themes) {
     background-color: themed('title-bar-background-color');
     border-color: themed('title-bar-background-color');
@@ -38,6 +37,8 @@ body {
   position:relative;
 }
 
+
+
 .button-text {
   width: 100%;
   position: absolute;
@@ -45,6 +46,8 @@ body {
   left: 50%;
   transform: translate(-50%, -60%);
 }
+
+
 
 .title-bar-button:hover {
   @include themify($themes) {

@@ -4,6 +4,7 @@
   border-color: darkgrey;
   font-size: 14px;
   border-top-width: 5px;
+  color:white !important;
 }
 
 .listItemGroupItem {
@@ -12,6 +13,7 @@
     background-color:none;
     margin: 0 0 8px 0;
     border-top-width: 4px;
+    color: white !important;
   }
 }
 
@@ -33,12 +35,16 @@
   @include themify($themes) {
     background-color: themed('submitted-jobs-color-error-odd');
     border-color: themed('submitted-jobs-color-error-odd');
+   
   }
+  color:white !important;
 }
 
 .FAILURE_EVEN {
   @include themify($themes) {
     background-color: themed('submitted-jobs-color-error-even');
     border-color: themed('submitted-jobs-color-error-even');
+   
   }
+  color:white !important;
 }

@@ -7,10 +7,7 @@ import { connect } from 'react-redux'
 import './StitchedFile.scss'
 import fieldBind from './StitchedFile.fields/StitchedFile.fields'
 
-import { ODD, EVEN, FAILURE } from './../../../constants/cssClassNames'
-import { STITCHING_FILE, SUCCESS, ERROR } from './../../../constants/job_archiving_statuses'
-
-import defined from './../../../utils/defined'
+import Regex from './../../../utils/regex'
 
 const uuidv4 = window.require("uuid/v4")
 
@@ -20,39 +17,58 @@ class ConnectedStitchedFile extends Component {
 
     logicConstructor.bind(this)(props)
     fieldBind.bind(this)()
-
-    if(defined(this.StitchedFileObject)){
-      console.log("StitchedFileObject:")
-      console.log(this.StitchedFileObject)
-    }
-    else {
-      console.log("StitchedFileObject is not defined...")
-    }
   }
 
   render() {
-    let oddOrEven = ODD
+    let fileClasses = this.getClassNamesForColorCoding(
+      this.StitchedFileObject.fileStitcher.fileStitchingStatus,
+      Regex.defaultIfNotDefined('', this.StitchedFileObject.fileStitcher, "mpegConverter.mpegConversionStatus"),
+      this.props.fileOrdinalNumber
+    )
+    
+    /*
+    let successOrFailure_stitching = ''
+    let successOrFailure_conversion = ''
+    let successOrFailure_overall = ''
+    let oddOrEven = (this.props.fileOrdinalNumber % 2 === 0 ? EVEN : ODD) 
 
-    if(this.props.jobOrdinalNumber%2 ===0){
-      oddOrEven = EVEN
-    }
-
-    let successOrFailure = ''
-
-    if(this.StitchedFileObject.fileStitcher.fileStitchingStatus === STITCHING_FILE){
-      successOrFailure = ''
+    // STITCHING SUCCESS OR FAILURE
+    if(this.StitchedFileObject.fileStitcher.fileStitchingStatus === STITCHING_FILE
+      || this.StitchedFileObject.fileStitcher.fileStitchingStatus === QUEUED){
+      successOrFailure_stitching = ''
     }
     else if(this.StitchedFileObject.fileStitcher.fileStitchingStatus === SUCCESS){
-      successOrFailure = SUCCESS
+      successOrFailure_stitching = SUCCESS
     }
     else if(this.StitchedFileObject.fileStitcher.fileStitchingStatus === ERROR){
-      successOrFailure = FAILURE
+      successOrFailure_stitching = FAILURE
     }
 
-    let fileClasses = ''
-    if(successOrFailure !== ''){
-      fileClasses = successOrFailure + '_' + oddOrEven
+    // CONVERSION SUCCESS OR FAILURE
+    if(successOrFailure_stitching === SUCCESS) {
+      let status = Regex.defaultIfNotDefined('', this.StitchedFileObject.fileStitcher, "mpegConverter.mpegConversionStatus")
+
+      if(status === SUCCESS) {
+        successOrFailure_conversion = SUCCESS
+      }
+      else if(firstEqualsOneOfTheOthers(status, FAILURE, ERROR)) {
+        successOrFailure_conversion = FAILURE
+      }
     }
+
+    // OVERALL SUCCESS OR FAILURE
+    if(successOrFailure_stitching === SUCCESS && successOrFailure_conversion === SUCCESS) {
+      successOrFailure_overall = SUCCESS
+    }
+    else if(successOrFailure_stitching === FAILURE || successOrFailure_conversion === FAILURE) {
+      successOrFailure_overall = FAILURE
+    }
+
+    // GET FINAL RESULT
+    if(successOrFailure_overall !== ''){
+      fileClasses = successOrFailure_overall + '_' + oddOrEven
+    }
+    */
 
     return (
       <ListGroup.Item
@@ -64,19 +80,22 @@ class ConnectedStitchedFile extends Component {
         key={this.StitchedFileObject.id}
       >
         <Row className="JobNumber">
-          <Col style={{maxWidth:'140px', padding:'0px'}}><ul>Job Number:</ul></Col>
+          <Col style={{maxWidth:'140px', padding:'0px'}}><u>Job Number:</u></Col>
           <Col style={{paddingLeft:'10px'}}>{this.StitchedFileObject.jobNumber}</Col>
         </Row>
+        
 
-        <Row className="JobNumber">
-          <Col style={{malWidth:'140px', padding:'0px'}}><u>Source:</u></Col>
-          <Col style={{padingLeft:'10px'}}>videoin02/{this.StitchedFileObject.jobNumber}</Col>
-        </Row>
-
-        <Row className="JobNumber">
-          <Col style={{malWidth:'140px', padding:'0px'}}><u>Destination:</u></Col>
+        <Row className="AudioAdjustment">
+          <Col style={{maxWidth:'140px', padding:'0px'}}><u>Audio Adjustment:</u></Col>
           <Col style={{paddingLeft:'10px'}}>
-            videoin02/{this.StitchedFileObject.newFileName}
+            {this.StitchedFileObject.fileStitcher.audioAdjustment}
+          </Col>
+        </Row>
+        
+        <Row className="DestinationFileName">
+          <Col style={{maxWidth:'140px', padding:'0px'}}><u>Destination File Name:</u></Col>
+          <Col style={{paddingLeft:'10px'}}>
+            {this.StitchedFileObject.fileStitcher.ApiPayloadCreator.state.path_format}
           </Col>
         </Row>
 
@@ -87,11 +106,50 @@ class ConnectedStitchedFile extends Component {
 
         <Row className="SubmissionResponse">
           <Col style={{maxWidth:'140px', padding:'0px'}}><u>Stitching Service Response:</u></Col>
-          <Col style={{padingLeft:'10px'}}>
-            <Row style={{margin:'0 0'}}>{this.StitchedJobObject.fileStitchingStatus.fileStitchingStatus}</Row>
+          <Col style={{paddingLeft:'10px'}}>
+            <Row style={{margin:'0 0'}}>{this.StitchedFileObject.fileStitcher.fileStitchingStatus}</Row>
           </Col>
         </Row>
 
+        <Row className="ErrorMsgList" style={{margin:'0 0'}}>
+          <ListGroup style={{border:'none'}}>
+            {
+              this.StitchedFileObject.fileStitcher.errorMsgList.map(
+                errorMsgObject => (
+                  <ListGroup.Item style={{padding:'2px 0', border:'none'}} key={uuidv4()}>
+                    {errorMsgObject.errorMsg}
+                  </ListGroup.Item>
+                )
+              )
+            }
+          </ListGroup>
+        </Row>
+
+        <Row className="SubmissionResponse">
+          <Col style={{maxWidth:'140px', padding:'0px'}}><u>Conversion Service Response:</u></Col>
+          <Col style={{paddingLeft:'10px'}}>
+            <Row style={{margin:'0 0'}}>
+              { Regex.defaultIfNotDefined('', this.StitchedFileObject.fileStitcher, "mpegConverter.mpegConversionStatus") }
+            </Row>
+          </Col>
+        </Row>
+
+        <Row className="ErrorMsgList" style={{margin:'0 0'}}>
+          <ListGroup style={{border:'none'}}>
+            {
+              (Regex.defaultIfNotDefined([], this.StitchedFileObject.fileStitcher, 'mpegConverter.errorMsgList')).map(
+                errorMsgObject => (
+                  <ListGroup.Item style={{padding:'2px 0', border:'none'}} key={uuidv4()}>
+                    {errorMsgObject.errorMsg}
+                  </ListGroup.Item>
+                )
+              )
+            }
+          </ListGroup>
+        </Row>
+
+
+        { this.JobDetails() }
       </ListGroup.Item>
     )
   }

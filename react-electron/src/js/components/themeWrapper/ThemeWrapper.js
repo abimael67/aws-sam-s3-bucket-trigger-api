@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from "react-router-dom"
 import { Route } from 'react-router-dom'
-import { TOGGLE_DARK_THEME } from './../../constants/action-types'
 import { THEME_DARK, THEME_LIGHT } from './../../constants/themes'
 import { Container } from 'react-bootstrap'
 import defined from './../../utils/defined'
@@ -13,71 +12,63 @@ import ChangePassword from './../auth/changePassword/ChangePassword'
 import App from './../app/App'
 import JobStatus from './../jobStatus/JobStatus'
 import JobArchiving from './../jobArchiving/JobArchiving'
+import MpegConversion from './../mpegConversion/MpegConversion'
+import LocalDownload from './../localDownload/LocalDownload'
 import FileStitching from './../fileStitching/FileStitching'
 import About from './../../../pages/about'
 import Documentation from './../../../pages/documentation'
-import ClearStateAction from './../../utils/clearStateAction'
 import CheckUserActivity from './../../utils/checkUserActivity'
-const uuidv4 = window.require("uuid/v4")
+import mapStateToProps from './mapStateToProps'
+import EmbeddedWeb from './../embeddedweb/EmbeddedWeb'
+import NavMenuBar from '../menubar/NavMenuBar'
 
-function mapStateToProps(state, ownProps) {
-  console.log("Inside themewrapper mapStateToProps()...")
-  console.log("themewrapper mapStateToProps() state:")
-  console.log(state)
-
-  let update = {}
-  
-  if(
-    defined(state.action)
-    && (state.action.type === TOGGLE_DARK_THEME)
-  ) {
-    console.log("Inside themeWrapper mapStateToProps() and state.action.type === TOGGLE_DARK_THEME")
-    console.log("Toggling dark theme...")
-
-    ClearStateAction(window.store);
-    update.TriggerRender = uuidv4()
-  }
-
-  return update
-}
 class ConnectedThemeWrapper extends Component {
   constructor(props) {
     super(props);
-    let { theStore } = props
-    this.theStore = theStore
+    this.theStore = props.theStore
     CheckUserActivity(this);
   }
+
   getTheme() {
     let theme = THEME_DARK;
+    let storeState
 
-    if(defined(this.theStore.getState().theme) && this.theStore.getState().theme === THEME_LIGHT){ 
-      console.log(this.theStore.getState());
-      theme=this.theStore.getState().theme;
+    if(defined(this, "theStore")) { storeState = this.theStore.getState() }
+
+    if(defined(storeState, "theme") && storeState.theme === THEME_LIGHT){ 
+      theme = storeState.theme;
     }
 
     return theme;
   }
 
   render(){
-    let className = this.getTheme();
-    
+    let className = this.getTheme()
+
     return (
       <div id = "themeWrapper" 
-        className = { className + ' ' + className } 
+        className = { className } 
         style={{height:'100%'}}
       >
+         <TitleBar />
+        
       <Container xs={12} className="windowContainer" >
-        <TitleBar />
+       <span><NavMenuBar /></span>
+      
         <Route exact path="/" component={Login} />
         <Route path="/login" component={Login} />
         <Route path="/changepassword" component={ChangePassword} />
         <Route path="/register" component={Login} />
-        <Route exact path="/app" component={App} />
         <Route path="/about" component={About} />                
         <Route path="/documentation" component={Documentation} />
         <Route path="/jobstatus" component={JobStatus} />
+        <Route exact path="/app" component={App} />
         <Route path="/jobarchiving" component={JobArchiving} />
         <Route path="/filestitching" component={FileStitching} />
+        <Route path="/filestitchingqa" component={FileStitching} />
+        <Route path="/mpegconversion" component={MpegConversion} />
+        <Route path="/localdownload" component={LocalDownload} />
+        <Route path="/embeddedweb" component={EmbeddedWeb} />
         <Route path="/drc" component={Login} />
         <FooterBar />
       </Container>

@@ -2,7 +2,7 @@ import { Auth } from 'aws-amplify';
 
 async function handleSubmit(event) {
   event.preventDefault();
-  console.log("Inside ChangePassword handleSubmit()...")
+  //^^//console.log("Inside ChangePassword handleSubmit()...")
 
   let newState = { ...this.state }
   newState.attemptingChangePassword = true;
@@ -20,9 +20,7 @@ async function handleSubmit(event) {
         cognitoUser,
         newPassword,
         {
-          given_name: 'john',
-          email: 'placeholder@email.com',
-          phone_number: '+15551112222'
+          given_name: 'john'
         }
       )
 
@@ -43,8 +41,8 @@ async function handleSubmit(event) {
       }
     })
 
-    console.log("Error changing passwords. error:");
-    console.log(e)
+    //^^//console.log("Error changing passwords. error:");
+    //^^//console.log(e)
   }
 }
 

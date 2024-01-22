@@ -1,17 +1,19 @@
+const { dialog, BrowserWindow, ipcMain } = require('electron-updater');
+
 function createProgressBar() {
   const ProgressBar = require('electron-progressbar');
   let progressBar = new ProgressBar({
-      text:'VeriSync is updating...',
+      text:'VeriSuite is updating...',
       detail: 'Updating...'
     });
 
   progressBar
     .on('completed', function() {
-      console.info('Completed...');
-      progressBar.detail = 'Update has been downloaded. VeriSync will relaunch automatically after installation.';
+      //^^//console.info('Completed...');
+      progressBar.detail = 'Update has been downloaded. VeriSuite will relaunch automatically after installation.';
     })
     .on('aborted', function() {
-      console.info('Update was aborted...');
+      //^^//console.info('Update was aborted...');
       throw Error('Error during update');
     });
   
@@ -20,6 +22,7 @@ function createProgressBar() {
 
 async function CheckForUpdates() {
   try {
+    //^^//console.log("Checking for Updates...")
     const { autoUpdater } = require('electron-updater');
     //let progressBar;
 
@@ -38,8 +41,8 @@ async function CheckForUpdates() {
     });
   }
   catch (e) {
-    console.log(`Error while looking for available updates: ${e}`);
-    alert(`Error while looking for available updates. Please reach out to support with the following error: ${e}`);
+    //^^//console.log(`Error while looking for available updates: ${e}`);
+    //alert(`Error while looking for available updates. Please reach out to support with the following error: ${e}`);
   }
 }
 

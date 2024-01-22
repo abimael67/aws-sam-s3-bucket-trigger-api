@@ -1,4 +1,7 @@
-import defined from './../../../utils/defined'
+import JOB_ARCHIVING_CONSTANTS from "../../../constants/job-archiving";
+import firstEqualsOneOfTheOthers from "../../../utils/first-equals-one-of-the-others";
+
+const { SOURCE_BUCKETS } = JOB_ARCHIVING_CONSTANTS 
 
 function Clean(field) {
   if (
@@ -13,12 +16,19 @@ function Clean(field) {
 
 function CheckForEmptyFields() {
   let areThereEmptyFields = true;
-  const { jobNumber, year, month } = this.state;
+  const { sourceBucket, jobNumber, year, month } = this.state;
 
   if(
-    Clean(jobNumber) !== ''
-    && Clean(year) !== ''
-    && Clean(month) !== ''
+    (
+      sourceBucket === SOURCE_BUCKETS.vxtprod
+      && Clean(jobNumber) !== ''
+      && Clean(year) !== ''
+      && Clean(month) !== ''
+    )
+    || (
+      firstEqualsOneOfTheOthers(sourceBucket, SOURCE_BUCKETS.videoin01, SOURCE_BUCKETS.vxtzoom01)
+      && Clean(jobNumber) !== ''
+    )
   ) {
     areThereEmptyFields = false;
   }

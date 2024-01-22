@@ -1,30 +1,32 @@
 import defined from './../../../utils/defined'
+import Logging from './../../../utils/logging'
 import JobArchiver from "../../../classes/jobArchiver/jobArchiver"
+import getConstructorState from './getConstructorState'
 
 const uuidv4 = window.require("uuid/v4")
 
 async function handleSubmit(event) {
   let date = new Date()
   event.preventDefault();
-  console.log("Inside Job Archiving handleSubmit()...")
+  //^^//console.log("Inside Job Archiving handleSubmit()...")
+  let currentId = uuidv4()
+
 
   let storeState = window.store.getState()
 
-  console.log(storeState)
-  
+  //^^//console.log(storeState)
+
   let errorPresent = this.ValidateJobArchivingFields();
 
+ 
   try {
-    if(errorPresent === false) {
-      const { jobNumber, year, month } = this.state;
-
-      // ARCHIVE JOB
-      //TODO: Implement
-      if(defined(storeState.user)){
+    if (errorPresent === false) {
+      if (defined(storeState.user)) {
         storeState.user.resetLastTimeOfActivity()
-        let currentId = uuidv4()
+
 
         let jobArchiver = new JobArchiver({
+          sourceBucket: this.state.sourceBucket,
           externalJobNumber: this.state.jobNumber,
           year: this.state.year,
           month: this.state.month,
@@ -34,26 +36,21 @@ async function handleSubmit(event) {
           contactPhone: storeState.user.contactPhone,
           id: currentId
         })
-        
+
         this.props.AddArchivedJob({
           id: currentId,
           jobNumber: this.state.jobNumber,
           jobArchiver: jobArchiver,
           date: date
         })
-
-        console.log("this.state:")
-        console.log(this.state)
-
-        this.setState({
-          id: "",
-          jobNumber: "",
-          year: "",
-          month: "",
-          user: this.state.user
-        })
-
-      } 
+        jobArchiver.archiveJob()
+        let defaultState = getConstructorState();
+        delete defaultState.sourceBucket
+        this.setState((state, props) => ({
+          ...defaultState,
+          errors: state.errors
+        }))
+      }
       else {
         alert("You are not logged in. Please log in and try again.");
       }
@@ -63,21 +60,20 @@ async function handleSubmit(event) {
       //TODO: Implement
     }
     else {
-      console.log("Job Archiving handleSubmit errorsPresent:");
-      console.log(errorPresent);
+      Logging.error(null, "Job Archiving handleSubmit errorsPresent:", errorPresent)
     }
-  
+
   } catch (error) {
     let e = null;
-    !error.message ? e = { "message" : error } : e = error;
+    !error.message ? e = { "message": error } : e = error;
     this.setState({
       errors: {
         ...this.state.errors,
       }
     })
 
-    console.log("Error Archiving Job. error:");
-    console.log(e);
+    Logging.logError("Error Archiving Job:", e)
+
   }
 }
 

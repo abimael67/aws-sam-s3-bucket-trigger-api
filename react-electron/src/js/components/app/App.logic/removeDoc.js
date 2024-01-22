@@ -1,7 +1,9 @@
 function RemoveDoc(draggableId) {
-  console.log("inside syncApp RemoveDoc...");
-  console.log("this.state:");
-  console.log(this.state);
+  //^^//console.log("inside RemoveDoc...");
+  //^^//console.log("this:")
+  //^^//console.log(this)
+  //^^//console.log("this.state:");
+  //^^//console.log(this.state);
 
   var newDocs = {...this.state.sourceFiles.docs};
   delete newDocs[draggableId];
@@ -27,13 +29,13 @@ function RemoveDoc(draggableId) {
     }
   }
 
-  console.log("App.logic RemoveDoc() newState:");
-  console.log(newState);
+  //^^//console.log("RemoveDoc() newState:");
+  //^^//console.log(newState);
 
   this.setState(newState);
 
-  console.log("App.logic RemoveDoc() this.state");
-  console.log(this.state);
+  //^^//console.log("RemoveDoc() this.state");
+  //^^//console.log(this.state);
 }
 
 export default RemoveDoc; 

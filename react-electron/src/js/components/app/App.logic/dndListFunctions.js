@@ -6,7 +6,7 @@ import defined from '../../../utils/defined';
 function onDragStart() {
   //this.style.color = 'orange';
   //this.style.transition = 'background-color 0.2s ease'
-  console.log("Drag started...");
+  //^^//console.log("Drag started...");
 };
 
 function onDragUpdate(update) {
@@ -15,14 +15,14 @@ function onDragUpdate(update) {
   //  ? destination.index / Object.keys(this.state.sourceFiles.docs).length
   //  : 0;
   //this.style.backgroundColor = 'rgba(153, 141, 217, ${opacity})';
-  console.log("Drag update...");
+  //^^//console.log("Drag update...");
 
 }
 
 function onDragEnd(result) {
   //this.style.color = 'black';
   //this.style.backgroundColor = 'beige';
-  console.log("drag ending...");
+  //^^//console.log("drag ending...");
 
   const { destination, source, draggableId } = result;
 
@@ -46,23 +46,7 @@ function onDragEnd(result) {
                      // are dropped outside of a droppable item
     newDocIds.splice(destination.index, 0, draggableId);
   }
-  /*
-  else {
-    console.log("onDragEnd draggableIdee:");
-    console.log(draggableId);
-    console.log("this:");
-    console.log(this);
 
-  let payload = { 
-    type: REMOVE_DOC,
-    draggableId: draggableId
-  };
-
-  store.dispatch(action(REMOVE_DOC, payload));
-
-    delete newDocs[draggableId];
-  }
-  */
 
   const newColumn = {
     ...column,

@@ -5,3 +5,18 @@
         background-color: themed('main-background-color')
     }
 }
+
+.nav-link:hover, .nav-link.active{
+    
+    @include themify ($themes) {
+        color: themed('tab-color');
+        background-color: themed('tab-background-color');
+    }
+}
+.nav-link{
+    
+    @include themify ($themes) {
+        color: themed('main-color');
+     
+    }
+}

@@ -1,12 +1,12 @@
 import React from 'react'
-import { Form, Col } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import BlankfieldErrorDisplay from './../fileStitching.logic/blankFieldErrorDisplay'
 
 function FormErrors() {
   let errors = []
 
   errors = errors
-    .concat(BlankfieldErrorDisplay(this.state.errors.blankfield))
+    .concat(BlankfieldErrorDisplay(this.state.errors.blankField))
   
   let height = '35px'
 

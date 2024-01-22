@@ -7,7 +7,7 @@ import handleClickBrowse from './handleClickBrowse'
 import handleJobNumberPressEnterKey from './handleJobNumberPressEnterKey'
 import mapDispatchToProps from './mapDispatchToProps'
 
-function logicConstructor(props) {
+function logicConstructor() {
   this.state = getConstructorState();
   this.handleChange = handleChange.bind(this);
   this.handleSubmit = handleSubmit.bind(this);

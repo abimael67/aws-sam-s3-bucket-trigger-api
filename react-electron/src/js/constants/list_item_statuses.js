@@ -1,4 +1,11 @@
-  export const STARTING_JOB = 'Starting Job...';
+export const STARTING_JOB = 'Starting Job...';
+export const STITCHING_FILE = 'Stitching File...';
+export const QUEUED = 'Queued';
+export const DOWNLOADING = 'Downloading'
+export const PROCESSING = 'Processing'
+export const PREPARING = "Preparing"
+export const UPLOADING = 'Uploading'
 export const SUCCESS = 'Success';
 export const ERROR = 'Error(s):';
+export const FAIL = 'fail';
 export const ERROR_API_NOT_RESOLVED = 'Error: API call was not resolved correctly.';

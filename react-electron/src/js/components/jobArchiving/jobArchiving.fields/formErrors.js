@@ -1,9 +1,14 @@
 import React from 'react'
 import { Form, Col } from 'react-bootstrap'
 import BlankfieldErrorDisplay from './../jobArchiving.logic/blankFieldErrorDisplay'
+import Logging from './../../../utils/logging'
 
 function FormErrors() {
   let errors = [];
+
+  Logging.LogSectionStart("src.js.components.jobArchiving.jobArchiving.fields.formErrors.js FormErrors() about to display this.state")
+  Logging.log("Inside FormErrors(). this.state:", this.state)
+  Logging.LogSectionEnd()
 
   errors = errors
     .concat(BlankfieldErrorDisplay(this.state.errors.blankfield))
