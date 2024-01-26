@@ -48,8 +48,12 @@ function GetSubfolders(fileList_raw){
   let date = new Date();
   let storeState = window.store.getState()
   let subfolders = GetSubfolders(this.state.sourceFiles)
-
+ 
   if(defined(storeState.user)) {
+    if(!this.state.jobNumber){
+      alert("Job number is required!")
+      return
+    }
     storeState.user.resetLastTimeOfActivity();
     let currentId = uuidv4();
     event.preventDefault();
@@ -57,8 +61,8 @@ function GetSubfolders(fileList_raw){
     let apiCaller = new APICaller({
       externalJobNumber: this.state.jobNumber,
       // DO NOT ERASE
-      //deponentFirstName: this.state.deposition.deponentFirstName,
-      //deponentLastName: this.state.deposition.deponentFirstName,
+      deponentFirstName: this.state.firstName,
+      deponentLastName: this.state.lastName,
       //depositionDate: this.state.deposition.depositionDate,
       //caseName: this.state.deposition.caseName,
       //caseNumber: this.state.deposition.caseNumber,

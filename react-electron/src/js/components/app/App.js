@@ -34,6 +34,7 @@ class ConnectedApp extends Component {
               <Form.Row style={{maxHeight:'80px'}}>{ this.JobNumber() }</Form.Row>
               <Form.Row>{ this.SourceFiles() }</Form.Row>
               <Form.Row style={{maxHeight:'80px'}}>{ this.OrderType() }{ this.Priority() }</Form.Row>
+              <Form.Row style={{maxHeight:'80px'}}>{ this.FirstName() }{ this.LastName() }</Form.Row>
               <Form.Row style={{maxHeight:'130px'}}>{ this.Notes() }</Form.Row>
               <Form.Row style={{maxHeight:'40px'}}>{ this.SubmitJobButton() }</Form.Row>
             </Col>

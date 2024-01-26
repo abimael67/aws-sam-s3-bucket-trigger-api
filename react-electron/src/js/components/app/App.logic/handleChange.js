@@ -11,4 +11,4 @@ function handleChange(event) {
   this.updatePriorityOptions(event);
 }
 
-export default handleChange;
+export default handleChange; 

@@ -35,7 +35,6 @@ class APICaller {
   }) {
     this.CallAPI = this.CallAPI.bind(this)
     this.apiUrl = ""
-
     this.APIPayloadCreator = new APIPayloadCreator({
       externalJobNumber: externalJobNumber,
       deponentFirstName: deponentFirstName,
@@ -61,6 +60,13 @@ class APICaller {
     })
 
     this.json = this.APIPayloadCreator.formattedAPIPayload
+    if(!deponentFirstName || !deponentLastName){
+      let temp = JSON.parse(this.json)
+      delete temp.DeponentFirstName
+      delete temp.DeponentLastName
+      this.json = temp
+    }
+  
     this.dateDisplay = FILE_SYNCING_CONSTANTS.DATE_DISPLAY_DEFAULT
     this.APICallStatus = STARTING_JOB
     this.errorMsgList = []

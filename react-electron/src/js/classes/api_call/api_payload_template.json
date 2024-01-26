@@ -11,6 +11,8 @@
   "CreateImage": "CreateImage_val_int",
   "ContactName": "ContactName_val",
   "ContactEmail": "ContactEmail_val",
+  "DeponentFirstName": "DeponentFirstName_val",
+  "DeponentLastName": "DeponentLastName_val",
   "ContactPhone": "ContactPhone_val",
   "AllowedConfidenceLevelPercent": "AllowedConfidenceLevelPercent_val_int",
   "Notes": "Notes_val"
