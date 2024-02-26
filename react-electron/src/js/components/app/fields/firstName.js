@@ -11,7 +11,7 @@ function FirstName() {
           id="firstName"
           value={this.state.firstName}
           onChange={this.handleChange}
-          maxLength='8'
+          maxLength='20'
         />
       </Form.Group>
     )

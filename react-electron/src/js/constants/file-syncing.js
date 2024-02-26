@@ -29,7 +29,7 @@ const FILE_SYNCING_CONSTANTS = {
   CLIENT_ACCESS_KEY_FILE: `${STRING_CONSTANTS.USER_DATA_FOLDER}\\private\\CLIENT_ACCESS_KEY.txt`,
   CLIENT_ACCESS_KEY_QA_FILE: `${STRING_CONSTANTS.USER_DATA_FOLDER}\\private\\CLIENT_ACCESS_KEY_QA.txt`,
   API: {
-    URL_BASE: "https://legalTEST.yeslaw.net/api/AutoJobManager/AddJobToQueue?clientAccessKey=",
+    URL_BASE: "https://legal.yeslaw.net/api/AutoJobManager/AddJobToQueue?clientAccessKey=",
     METHOD: 'post',
     HEADERS: { 'content-type': 'application/json' }
   },

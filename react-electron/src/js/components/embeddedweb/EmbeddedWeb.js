@@ -7,7 +7,6 @@ import { Form, Col } from 'react-bootstrap'
 const { BrowserWindow, BrowserView } = window.require('@electron/remote')
 function WithRouterEmbeddedWeb(props) {
     let currentWindow = BrowserWindow.fromId(1);
-    console.log("CURR: ",currentWindow)
     const view = new BrowserView()
     //     {
     //         webPreferences: {

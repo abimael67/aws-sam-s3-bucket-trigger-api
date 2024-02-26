@@ -73,7 +73,6 @@ async function handleClickBrowse() {
 
   if(allowOpenDialog()){
     store.dispatch(action(DISALLOW_OPEN_DIALOG));
-    console.log("PEPEPE: ", dialog)
     try{
       var browseButtonResponse = 
         await dialog.showOpenDialog(
