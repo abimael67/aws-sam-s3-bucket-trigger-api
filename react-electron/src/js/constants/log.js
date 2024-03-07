@@ -44,7 +44,8 @@ const LOG = {
     hashtagLine: "############################################################",
     sectionStart: "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv",
     sectionEnd: "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-  }
+  },
+  dataDogClientAPI: "pub0ff83341635431b2198068ab313f08db"
 }
 
 export default LOG

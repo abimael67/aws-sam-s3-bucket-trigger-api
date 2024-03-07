@@ -1,11 +1,18 @@
 import { Auth } from 'aws-amplify';
 import { NEW_PASSWORD_REQUIRED, MFA_SETUP } from './../../../../constants/cognito_challenge_names'
 import defined from '../../../../utils/defined';
+import { datadogLogs } from '@datadog/browser-logs'
+import LOG from './../../../../constants/log'
 
 async function handleSubmit(event) {
   if(defined(event)) { event.preventDefault() }
   //^^//console.log("Inside Log in handleSubmit()...")
-
+  datadogLogs.init({
+    clientToken: LOG.dataDogClientAPI,
+    site: 'https://app.datadoghq.com/',
+    forwardErrorsToLogs: true,
+    sessionSampleRate: 100,
+  })
   let newState = { ...this.state }
   newState.attemptingLogin = true;
   await this.setState(newState);
@@ -60,6 +67,7 @@ async function handleSubmit(event) {
       }
     })
 
+    
     //^^//console.log("Error logging in user. error:");
     //^^//console.log(e);
   }

@@ -11,7 +11,7 @@
     "productName": "VeriSuite",
     "win": {
       "icon": "build/icon.ico",
-      "certificateFile": "private/albrechtsoft.pfx",
+      "certificateFile": "private/Veritext, LLC.pfx",
       "verifyUpdateCodeSignature": false,
       "publisherName": "veritext",
       "publish": [
